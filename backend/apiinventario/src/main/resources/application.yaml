@@ -12,3 +12,12 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
+app:
+  admin:
+    numero-documento: "70000001"
+    nombres: "Administrador"
+    apellidos: "Voltio & Pedal"
+    password: ${ADMIN_PASSWORD:}
+    pregunta-seguridad: "¿Nombre de la tienda?"
+    respuesta-seguridad: ${ADMIN_RESPUESTA:}
+    
