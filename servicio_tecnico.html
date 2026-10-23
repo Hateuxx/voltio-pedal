@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Voltio & Pedal - Servicio Técnico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="topbar border-bottom px-3 py-2 d-flex justify-content-between align-items-center">
+        <h4 class="m-0 fw-bold">SERVICIO TÉCNICO Y MANTENIMIENTO</h4>
+        <div class="w-25">
+            <input type="search" class="form-control form-control-sm" placeholder="Buscar por N° Orden o Cliente">
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle fs-3 text-primary"></i>
+            <span class="fw-bold">USER | Admin</span>
+        </div>
+    </header>
+
+    <div class="d-flex flex-grow-1">
+        <aside class="sidebar border-end p-2 d-flex flex-column justify-content-between">
+            <div>
+                <div class="bg-secondary text-white text-center py-4 mb-3 rounded">
+                    <strong>LOGO</strong>
+                </div>
+                <nav class="nav nav-pills flex-column gap-1">
+                    <a class="nav-link" href="inicio.html">Inicio</a>
+                    <a class="nav-link" href="ventas.html">Ventas / Salidas</a>
+                    <a class="nav-link active" href="servicio_tecnico.html">Servicio Técnico</a>
+                    <a class="nav-link" href="productos.html">Productos</a>
+                    <a class="nav-link" href="proveedores.html">Proveedores</a>
+                    <a class="nav-link" href="reportes.html">Reportes</a>
+                </nav>
+            </div>
+            <a class="btn btn-outline-dark w-100 my-2" href="login.html">Cerrar Sesión</a>
+        </aside>
+
+        <main class="flex-grow-1 p-4 d-flex flex-column justify-content-between">
+            <div>
+                <h2 class="fw-bold mb-3">Órdenes de Servicio Técnico</h2>
+
+                <!-- Filtros por Estado -->
+                <div class="card p-3 mb-4 shadow-sm border-dark">
+                    <form class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label font-monospace">Filtrar por Estado</label>
+                            <select class="form-select">
+                                <option selected>Todos los estados</option>
+                                <option>En Diagnóstico</option>
+                                <option>En Proceso</option>
+                                <option>Esperando Repuestos</option>
+                                <option>Completado / Finalizado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label font-monospace">Buscar por N° Orden o Cliente</label>
+                            <input type="text" class="form-control" placeholder="Ej: ORD-2026-001 o Carlos Mendoza">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-primary w-100 fw-bold"><i class="bi bi-funnel"></i> Aplicar Filtros</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tabla de Órdenes -->
+                <div class="card border-dark shadow-sm mb-4">
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle text-center mb-0">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>N° Orden</th>
+                                    <th>Cliente</th>
+                                    <th>Equipo / Modelo</th>
+                                    <th>Falla Reportada</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">ORD-2026-001</td>
+                                    <td>Carlos Mendoza</td>
+                                    <td>Scooter Xiaomi Pro 2</td>
+                                    <td>Fallo en controlador y batería</td>
+                                    <td>20/09/2026</td>
+                                    <td><span class="badge bg-warning text-dark">En Diagnóstico</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i> Ver</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">ORD-2026-002</td>
+                                    <td>Ana Torres</td>
+                                    <td>Scooter Eléctrico Urbano Plegable</td>
+                                    <td>Mantenimiento general y frenos</td>
+                                    <td>22/09/2026</td>
+                                    <td><span class="badge bg-info text-dark">En Proceso</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i> Ver</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIE DE PÁGINA (FOOTER) -->
+            <footer class="bg-dark text-light py-3 px-4 rounded border-top border-secondary mt-auto">
+                <div class="container-fluid">
+                    <div class="row gy-3 align-items-center text-center text-md-start small">
+
+                        <div class="col-md-4">
+                            <div class="fw-bold text-warning mb-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i>Voltio & Pedal S.A.C.
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>Sede: Almacén Principal - Lima
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-center">
+                            <div class="text-secondary mb-1">
+                                <i class="bi bi-headset me-1"></i>Soporte TI: <span class="text-light">Anexo 104</span>
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-envelope me-1"></i>soporte.ti@voltioypedal.pe
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-1">
+                                <a href="#" class="text-decoration-none text-light">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>Manual de Usuario
+                                </a>
+                            </div>
+                            <div>
+                                <span class="text-secondary me-2">&copy; 2026</span>
+                                <span class="badge bg-primary">v1.2.0</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+</body>
+</html>

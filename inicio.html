@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Voltio & Pedal - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Header / Topbar -->
+    <header class="topbar border-bottom px-3 py-2 d-flex justify-content-between align-items-center">
+        <h4 class="m-0 fw-bold">INICIO</h4>
+        <div class="w-25">
+            <input type="search" class="form-control form-control-sm" placeholder="Buscar en el sistema">
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle fs-3 text-primary"></i>
+            <span class="fw-bold">USER | Admin</span>
+        </div>
+    </header>
+
+    <div class="d-flex flex-grow-1">
+        <!-- Sidebar -->
+        <aside class="sidebar border-end p-2 d-flex flex-column justify-content-between">
+            <div>
+                <div class="bg-secondary text-white text-center py-4 mb-3 rounded">
+                    <strong>LOGO</strong>
+                </div>
+                <nav class="nav nav-pills flex-column gap-1">
+                    <a class="nav-link active" href="inicio.html">Inicio</a>
+                    <a class="nav-link" href="ventas.html">Ventas</a>
+                    <a class="nav-link" href="servicio_tecnico.html">Servicio Técnico</a>
+                    <a class="nav-link" href="productos.html">Productos</a>
+                    <a class="nav-link" href="proveedores.html">Proveedores</a>
+                    <a class="nav-link" href="reportes.html">Reportes</a>
+                </nav>
+            </div>
+            <a class="btn btn-outline-dark w-100 my-2" href="login.html">Cerrar Sesión</a>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="flex-grow-1 p-4 d-flex flex-column justify-content-between">
+            <div>
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h1 class="fw-bold display-5">¡¡BIENVENIDO A<br>VOLTIO & PEDAL<br>[Usuario]!!</h1>
+                    </div>
+                    <div class="col-md-4 d-flex flex-column gap-2">
+                        <a href="registrar_entrada.html" class="btn btn-primary fw-bold">Registrar Entrada de
+                            Almacén</a>
+                        <a href="proveedores.html" class="btn btn-info text-white fw-bold">Registrar Proveedor</a>
+                        <a href="servicio_tecnico.html" class="btn btn-warning fw-bold">Consultar Servicio Técnico</a>
+                        <a href="ventas.html" class="btn bg-purple text-white fw-bold">Historial de Ventas</a>
+                    </div>
+                </div>
+
+                <!-- Indicadores / Cards -->
+                <div class="row g-3 mb-4 text-center text-white">
+                    <div class="col-md-3">
+                        <div class="bg-danger p-3 rounded">
+                            <h3 class="fw-bold m-0">450 UNITs.</h3>
+                            <small>Total Productos en Stock</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-success p-3 rounded">
+                            <h3 class="fw-bold m-0">5</h3>
+                            <small>Productos en Stock Crítico</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-purple p-3 rounded">
+                            <h3 class="fw-bold m-0">12 unidades/día</h3>
+                            <small>Promedio Salidas Diarias</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="bg-warning text-dark p-3 rounded">
+                            <h3 class="fw-bold m-0">8 Atendidos</h3>
+                            <small>Servicios Técnicos del Mes</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla Alertas de Stock Mínimo -->
+                <div class="card border-dark mb-4">
+                    <div class="card-header bg-dark text-white text-center fw-bold">
+                        "Alertas de Stock Mínimo"
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0 text-center align-middle">
+                            <thead class="table-info">
+                                <tr>
+                                    <th>Cod/SKU</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Stock Actual</th>
+                                    <th>Stock Mínimo</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>REP-001</td>
+                                    <td>Batería de Litio 36V</td>
+                                    <td>Repuestos</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td class="text-danger fw-bold">Stock Bajo</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIE DE PÁGINA (FOOTER) -->
+            <footer class="bg-dark text-light py-3 px-4 rounded border-top border-secondary mt-auto">
+                <div class="container-fluid">
+                    <div class="row gy-3 align-items-center text-center text-md-start small">
+
+                        <div class="col-md-4">
+                            <div class="fw-bold text-warning mb-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i>Voltio & Pedal S.A.C.
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>Sede: Almacén Principal - Lima
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-center">
+                            <div class="text-secondary mb-1">
+                                <i class="bi bi-headset me-1"></i>Soporte TI: <span class="text-light">Anexo 104</span>
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-envelope me-1"></i>soporte.ti@voltioypedal.pe
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-1">
+                                <a href="#" class="text-decoration-none text-light">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>Manual de Usuario
+                                </a>
+                            </div>
+                            <div>
+                                <span class="text-secondary me-2">&copy; 2026</span>
+                                <span class="badge bg-primary">v1.2.0</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+</body>
+
+</html>

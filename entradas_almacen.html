@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Voltio & Pedal - Historial de Entradas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="topbar border-bottom px-3 py-2 d-flex justify-content-between align-items-center">
+        <h4 class="m-0 fw-bold">HISTORIAL DE ENTRADAS DE ALMACÉN</h4>
+        <div class="w-25">
+            <input type="search" class="form-control form-control-sm" placeholder="Buscar por N° Guía o Proveedor...">
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle fs-3 text-primary"></i>
+            <span class="fw-bold">USER | Admin</span>
+        </div>
+    </header>
+
+    <div class="d-flex flex-grow-1">
+        <aside class="sidebar border-end p-2 d-flex flex-column justify-content-between">
+            <div>
+                <div class="bg-secondary text-white text-center py-4 mb-3 rounded">
+                    <strong>LOGO</strong>
+                </div>
+                <nav class="nav nav-pills flex-column gap-1">
+                    <a class="nav-link" href="inicio.html">Inicio</a>
+                    <a class="nav-link" href="ventas.html">Ventas / Salidas</a>
+                    <a class="nav-link" href="servicio_tecnico.html">Servicio Técnico</a>
+                    <a class="nav-link active" href="productos.html">Productos</a>
+                    <a class="nav-link" href="proveedores.html">Proveedores</a>
+                    <a class="nav-link" href="reportes.html">Reportes</a>
+                </nav>
+            </div>
+            <a class="btn btn-outline-dark w-100 my-2" href="login.html">Cerrar Sesión</a>
+        </aside>
+
+        <main class="flex-grow-1 p-4 d-flex flex-column justify-content-between">
+            <div class="mb-4">
+                <!-- Encabezado con Botones Principales -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <a href="productos.html" class="btn btn-sm btn-outline-secondary mb-2"><i class="bi bi-arrow-left"></i> Volver a Productos</a>
+                        <h2 class="fw-bold m-0">Entradas de Mercadería</h2>
+                    </div>
+                    <!-- Botón que activa el Modal -->
+                    <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal" data-bs-target="#modalRegistrarEntrada">
+                        <i class="bi bi-box-arrow-in-down"></i> Registrar Nueva Entrada
+                    </button>
+                </div>
+
+                <!-- Tabla de Entradas -->
+                <div class="card border-dark shadow-sm">
+                    <div class="card-body p-0">
+                        <table class="table table-hover align-middle text-center mb-0">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>N° Registro</th>
+                                    <th>N° Factura / Guía</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Proveedor</th>
+                                    <th>Producto</th>
+                                    <th>Cant. Ingresada</th>
+                                    <th>Registrado Por</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">ING-2026-001</td>
+                                    <td>F001-9982</td>
+                                    <td>15/09/2026</td>
+                                    <td>Baterías y Repuestos del Perú S.A.C.</td>
+                                    <td>Batería Litio 36V</td>
+                                    <td>10 unid.</td>
+                                    <td>Almacenero / Admin</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">ING-2026-002</td>
+                                    <td>F001-4431</td>
+                                    <td>18/09/2026</td>
+                                    <td>EcoMotors Import S.R.L.</td>
+                                    <td>Bicicleta Eléctrica Urbano</td>
+                                    <td>5 unid.</td>
+                                    <td>Almacenero / Admin</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIE DE PÁGINA (FOOTER) -->
+            <footer class="bg-dark text-light py-3 px-4 rounded border-top border-secondary mt-auto">
+                <div class="container-fluid">
+                    <div class="row gy-3 align-items-center text-center text-md-start small">
+
+                        <div class="col-md-4">
+                            <div class="fw-bold text-warning mb-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i>Voltio & Pedal S.A.C.
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>Sede: Almacén Principal - Lima
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-center">
+                            <div class="text-secondary mb-1">
+                                <i class="bi bi-headset me-1"></i>Soporte TI: <span class="text-light">Anexo 104</span>
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-envelope me-1"></i>soporte.ti@voltioypedal.pe
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-1">
+                                <a href="#" class="text-decoration-none text-light">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>Manual de Usuario
+                                </a>
+                            </div>
+                            <div>
+                                <span class="text-secondary me-2">&copy; 2026</span>
+                                <span class="badge bg-primary">v1.2.0</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- MODAL: REGISTRAR NUEVA ENTRADA -->
+    <div class="modal fade" id="modalRegistrarEntrada" tabindex="-1" aria-labelledby="modalRegistrarEntradaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-dark">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold" id="modalRegistrarEntradaLabel"><i class="bi bi-box-arrow-in-down"></i> Registrar Nueva Entrada de Almacén</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label font-monospace">Proveedor</label>
+                                <select class="form-select">
+                                    <option selected>Seleccionar Proveedor...</option>
+                                    <option>Baterías y Repuestos del Perú S.A.C.</option>
+                                    <option>EcoMotors Import S.R.L.</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label font-monospace">N° Comprobante / Guía</label>
+                                <input type="text" class="form-control" placeholder="Ej: F001-000123">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label font-monospace">Producto a Ingresar</label>
+                                <select class="form-select">
+                                    <option selected>Seleccionar Producto...</option>
+                                    <option>Batería Litio 36V</option>
+                                    <option>Bicicleta Eléctrica Urbano</option>
+                                    <option>Pastillas de Freno Disco</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label font-monospace">Cantidad que Ingresa</label>
+                                <input type="number" class="form-control" placeholder="Ej: 10">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label font-monospace">Observaciones / Notas de Entrada</label>
+                                <textarea class="form-control" rows="3" placeholder="Detalles del estado de recepción o transporte..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success fw-bold" data-bs-dismiss="modal">Guardar Entrada en Almacén</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Bootstrap necesario para activar los modales -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

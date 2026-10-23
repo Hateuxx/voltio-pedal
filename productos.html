@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Voltio & Pedal - Catálogo de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <header class="topbar border-bottom px-3 py-2 d-flex justify-content-between align-items-center">
+        <h4 class="m-0 fw-bold">CATÁLOGO DE PRODUCTOS</h4>
+        <div class="w-25">
+            <input type="search" class="form-control form-control-sm" placeholder="Buscar por SKU o Nombre...">
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle fs-3 text-primary"></i>
+            <span class="fw-bold">USER | Admin</span>
+        </div>
+    </header>
+
+    <div class="d-flex flex-grow-1">
+        <aside class="sidebar border-end p-2 d-flex flex-column justify-content-between">
+            <div>
+                <div class="bg-secondary text-white text-center py-4 mb-3 rounded">
+                    <strong>LOGO</strong>
+                </div>
+                <nav class="nav nav-pills flex-column gap-1">
+                    <a class="nav-link" href="inicio.html">Inicio</a>
+                    <a class="nav-link" href="ventas.html">Ventas / Salidas</a>
+                    <a class="nav-link" href="servicio_tecnico.html">Servicio Técnico</a>
+                    <a class="nav-link active" href="productos.html">Productos</a>
+                    <a class="nav-link" href="proveedores.html">Proveedores</a>
+                    <a class="nav-link" href="reportes.html">Reportes</a>
+                </nav>
+            </div>
+            <a class="btn btn-outline-dark w-100 my-2" href="login.html">Cerrar Sesión</a>
+        </aside>
+
+        <main class="flex-grow-1 p-4 d-flex flex-column justify-content-between">
+            <div class="mb-4">
+                <!-- Encabezado con Botones Principales -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold m-0">Productos en Inventario</h2>
+                    <div class="d-flex gap-2">
+                        <a href="entradas_almacen.html" class="btn btn-outline-dark fw-bold">
+                            <i class="bi bi-journal-text"></i> Historial de Entradas
+                        </a>
+                        <!-- Botón que activa el Modal -->
+                        <button type="button" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#modalAgregarProducto">
+                            <i class="bi bi-plus-lg"></i> Agregar Producto
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grilla de Cards con los 3 Productos -->
+                <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+                    
+                    <!-- Card Producto 1 -->
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-dark">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv7-l1-bcSVsi7l1MhZ_rCcL09Mg4Q03Rc703jHMHWALOw2J45QRbW0uw&s=10" class="card-img-top object-fit-cover" alt="Batería" style="height: 180px;">
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-secondary mb-2 w-auto align-self-start">SKU: REP-001</span>
+                                <h5 class="card-title fw-bold mb-1">Batería Litio 36V</h5>
+                                <p class="text-muted small mb-2">Categoría: Repuestos</p>
+                                <div class="mt-auto">
+                                    <p class="fs-5 fw-bold text-success mb-1">S/ 450.00</p>
+                                    <p class="mb-3"><span class="badge bg-danger">Stock: 2 unid. (Crítico)</span></p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-warning w-50 fw-bold"><i class="bi bi-pencil-square"></i> Editar</button>
+                                        <button class="btn btn-sm btn-danger w-50 fw-bold"><i class="bi bi-trash"></i> Borrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Producto 2 -->
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-dark">
+                            <img src="https://media.falabella.com/falabellaPE/140828742_01/w=800,h=800,fit=pad" class="card-img-top object-fit-cover" alt="Scooter" style="height: 180px;">
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-secondary mb-2 w-auto align-self-start">SKU: VEH-002</span>
+                                <h5 class="card-title fw-bold mb-1">Scooter Eléctrico Plegable</h5>
+                                <p class="text-muted small mb-2">Categoría: Vehículos</p>
+                                <div class="mt-auto">
+                                    <p class="fs-5 fw-bold text-success mb-1">S/ 2,100.00</p>
+                                    <p class="mb-3"><span class="badge bg-success">Stock: 15 unid.</span></p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-warning w-50 fw-bold"><i class="bi bi-pencil-square"></i> Editar</button>
+                                        <button class="btn btn-sm btn-danger w-50 fw-bold"><i class="bi bi-trash"></i> Borrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Producto 3 -->
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-dark">
+                            <img src="https://fullpowermoto.com/wp-content/uploads/H3424deec961f4e469824a401d58eabe4H.jpg" class="card-img-top object-fit-cover" alt="Pastillas Freno" style="height: 180px;">
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-secondary mb-2 w-auto align-self-start">SKU: REP-003</span>
+                                <h5 class="card-title fw-bold mb-1">Pastillas de Freno Disco</h5>
+                                <p class="text-muted small mb-2">Categoría: Repuestos</p>
+                                <div class="mt-auto">
+                                    <p class="fs-5 fw-bold text-success mb-1">S/ 35.00</p>
+                                    <p class="mb-3"><span class="badge bg-success">Stock: 30 unid.</span></p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-warning w-50 fw-bold"><i class="bi bi-pencil-square"></i> Editar</button>
+                                        <button class="btn btn-sm btn-danger w-50 fw-bold"><i class="bi bi-trash"></i> Borrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PIE DE PÁGINA (FOOTER) -->
+            <footer class="bg-dark text-light py-3 px-4 rounded border-top border-secondary mt-auto">
+                <div class="container-fluid">
+                    <div class="row gy-3 align-items-center text-center text-md-start small">
+
+                        <div class="col-md-4">
+                            <div class="fw-bold text-warning mb-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i>Voltio & Pedal S.A.C.
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>Sede: Almacén Principal - Lima
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-center">
+                            <div class="text-secondary mb-1">
+                                <i class="bi bi-headset me-1"></i>Soporte TI: <span class="text-light">Anexo 104</span>
+                            </div>
+                            <div class="text-secondary">
+                                <i class="bi bi-envelope me-1"></i>soporte.ti@voltioypedal.pe
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end">
+                            <div class="mb-1">
+                                <a href="#" class="text-decoration-none text-light">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i>Manual de Usuario
+                                </a>
+                            </div>
+                            <div>
+                                <span class="text-secondary me-2">&copy; 2026</span>
+                                <span class="badge bg-primary">v1.2.0</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- MODAL: REGISTRAR PRODUCTO -->
+    <div class="modal fade" id="modalAgregarProducto" tabindex="-1" aria-labelledby="modalAgregarProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-dark">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="modalAgregarProductoLabel"><i class="bi bi-box-seam"></i> Registrar Nuevo Producto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label font-monospace">Código SKU</label>
+                                <input type="text" class="form-control" placeholder="Ej: REP-004">
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label font-monospace">Nombre del Producto</label>
+                                <input type="text" class="form-control" placeholder="Ej: Neumático Urbano 10x2.5">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label font-monospace">Categoría</label>
+                                <select class="form-select">
+                                    <option selected>Seleccionar...</option>
+                                    <option>Vehículos</option>
+                                    <option>Repuestos</option>
+                                    <option>Accesorios</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label font-monospace">Precio Venta (S/)</label>
+                                <input type="number" step="0.01" class="form-control" placeholder="0.00">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label font-monospace">Stock Inicial</label>
+                                <input type="number" class="form-control" placeholder="0">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label font-monospace">URL o Ruta de Imagen</label>
+                                <input type="text" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label font-monospace">Descripción / Especificaciones</label>
+                                <textarea class="form-control" rows="2" placeholder="Detalles técnicos del producto..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary fw-bold" data-bs-dismiss="modal">Guardar Producto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Bootstrap necesario para hacer funcionar el Modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

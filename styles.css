@@ -1,0 +1,42 @@
+/* Estilos generales y componentes */
+.card-custom-login {
+    max-width: 800px;
+    width: 100%;
+}
+
+.card-custom-registro {
+    max-width: 750px;
+    width: 100%;
+}
+
+.logo-placeholder {
+    height: 220px;
+}
+
+.bg-purple {
+    background-color: #a855f7 !important;
+}
+
+/* Topbar */
+.topbar {
+    background-color: #f9e970;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    min-height: calc(100vh - 56px);
+    background-color: #d9e2f6;
+}
+
+.sidebar .nav-link {
+    color: #000;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+}
+
+.sidebar .nav-link.active {
+    background-color: #919396;
+    font-weight: bold;
+}

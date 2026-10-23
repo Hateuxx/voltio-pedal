@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: apiinventario
+  datasource:
+    url: jdbc:mysql://localhost:3306/voltio_pedal
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+  web:
+    error: 
+      include-stacktrace: "never"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Voltio & Pedal - Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center py-5">
+
+    <div class="card shadow p-4 card-custom-registro">
+        <h2 class="text-center fw-bold mb-4">Regístrate</h2>
+        <form>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Tipo de Documento</label>
+                    <select class="form-select">
+                        <option selected>Selecciona tipo de documento</option>
+                        <option>DNI</option>
+                        <option>CE</option>
+                        <option>RUC</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Teléfono / Celular</label>
+                    <input type="text" class="form-control" placeholder="Ej: 999 888 777">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">N° de Documento</label>
+                    <input type="text" class="form-control" placeholder="Ej: 12345678">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Rol / Cargo en el sistema</label>
+                    <select class="form-select">
+                        <option selected>Seleccionar Rol</option>
+                        <option>Administrador</option>
+                        <option>Vendedor / Técnico</option>
+                        <option>Almacenero</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Nombres</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Contraseña</label>
+                    <input type="password" class="form-control" placeholder="**********">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Apellidos</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Confirmar contraseña</label>
+                    <input type="password" class="form-control" placeholder="**********">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label font-monospace">Correo electrónico</label>
+                    <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <button type="button" class="btn btn-secondary w-100 fw-bold py-2">REGISTRAR USUARIO</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
