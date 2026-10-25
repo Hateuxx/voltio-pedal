@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Entity 
 @Table (name = "cliente")
-@Getter @Setter @NoArgsConstructor 
+@Getter @Setter @NoArgsConstructor
 public class Cliente {
 
     /*ID CLIENTE */
@@ -19,23 +19,24 @@ public class Cliente {
 
 
     /*TIPO DOCUMENTO */
-    @Column (name = "tipo_documento", nullable = false, length = 20, unique = true)
-    private String tipoDocumento;
+    @Enumerated(EnumType.STRING)
+    @Column (name = "tipo_documento", nullable = false, length = 20)
+    private TipoDocumentoCliente tipoDocumento;
 
     /*NUMERO DOCUMENTO */
-    @Column (name = "numero_documento", nullable = false, length = 20, unique = true)
+    @Column (name = "numero_documento", nullable = false, length = 20)
     private String numeroDocumento;
 
     /*NOMBRES */
-    @Column (name = "nombres", nullable = false, length = 100, unique = true)
+    @Column (name = "nombres", nullable = false, length = 100)
     private String nombres;
 
     /*APELLIDOS */
-    @Column (name = "apellidos", nullable = false, length = 100, unique = true)
+    @Column (name = "apellidos", nullable = false, length = 100)
     private String apellidos;
 
     /*TELEFONO */
-    @Column (name = "telefono", nullable = false, length = 20, unique = true)
+    @Column (name = "telefono", length = 20)
     private String telefono;
 
 }

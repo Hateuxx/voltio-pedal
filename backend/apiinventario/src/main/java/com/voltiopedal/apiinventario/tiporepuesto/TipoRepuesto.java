@@ -3,7 +3,7 @@ package com.voltiopedal.apiinventario.tiporepuesto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;;
+import lombok.Setter;
 
 @Entity 
 @Table (name = "tipo_repuesto")
