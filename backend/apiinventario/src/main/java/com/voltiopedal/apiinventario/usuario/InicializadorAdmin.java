@@ -60,11 +60,15 @@ public class InicializadorAdmin implements CommandLineRunner{
             if(faltaRespuesta) {
                 errorMsg.append("\n - ADMIN_RESPUESTA (respuesta a la pregunta de seguridad)");
             }
-
             throw new IllegalStateException(errorMsg.toString());
         }
 
-        /* Normalizar la respuesta de seguridad (minúscula) */
+        /* 3er control: Cumplimiento de la política de seguridad */
+        if (!password.matches(PoliticaContrasena.PATRON)) {
+            throw new IllegalStateException("La contraseña configurada en ADMIN_PASSWORD es insegura. " + PoliticaContrasena.MENSAJE);
+        }
+
+        /* Normalizar la respuesta de seguridad: eliminar bordes (.trim()) y convertimos a minúsculas (.toLowerCase()) */
         String respuestaNormalizada = respuestaSeguridad.trim().toLowerCase();
 
         /* Creamos el usuario */

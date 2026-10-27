@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#Script local de arranque con credenciales
+iniciar.ps1
