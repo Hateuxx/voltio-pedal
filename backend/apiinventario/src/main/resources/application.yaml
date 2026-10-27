@@ -20,4 +20,10 @@ app:
     password: ${ADMIN_PASSWORD:}
     pregunta-seguridad: "¿Nombre de la tienda?"
     respuesta-seguridad: ${ADMIN_RESPUESTA:}
+  jwt:
+    secreto: ${JWT_SECRET:}
+    expiracion: 8h
+  seguridad:
+    intentos-maximos: 5
+    bloqueo: 15m
     
