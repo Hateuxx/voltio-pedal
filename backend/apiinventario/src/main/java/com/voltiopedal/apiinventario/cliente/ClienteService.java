@@ -17,7 +17,7 @@ public class ClienteService {
     }
 
     /* Listar */
-    public List<ClienteResponse> Listar() {
+    public List<ClienteResponse> listar() {
         return clienteRepository.findAllByOrderByNombresAsc().stream().map(this::aResponse).toList();
     }
 
@@ -26,7 +26,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento)
                 .orElseThrow(
                         () -> new RecursoNoEncontradoException(
-                                "No se encontro ningun cliente con el documento: " + numeroDocumento));
+                                "No se encontró ningún cliente con el documento: " + numeroDocumento));
         return aResponse(cliente);
     }
 
@@ -77,7 +77,7 @@ public class ClienteService {
         if (texto == null) {
             return null;
         }
-        String limpio = texto.trim();
+        String limpio = texto.trim().replaceAll("\\s+", " ");
 
         return limpio.isEmpty() ? null : limpio;
     }
