@@ -32,7 +32,7 @@ public class Cliente {
     private String nombres;
 
     /*APELLIDOS */
-    @Column (name = "apellidos", nullable = false, length = 100)
+    @Column (name = "apellidos", length = 100)
     private String apellidos;
 
     /*TELEFONO */
