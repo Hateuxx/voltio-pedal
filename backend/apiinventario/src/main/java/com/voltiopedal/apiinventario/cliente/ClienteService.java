@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
