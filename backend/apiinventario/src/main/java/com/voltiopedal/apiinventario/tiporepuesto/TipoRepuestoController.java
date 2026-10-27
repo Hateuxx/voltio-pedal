@@ -24,7 +24,7 @@ public class TipoRepuestoController {
 
     @GetMapping 
     public List<TipoRepuestoResponse> listar(){
-        return tipoRepuestoService.Listar();
+        return tipoRepuestoService.listar();
     }
 
     @PostMapping 

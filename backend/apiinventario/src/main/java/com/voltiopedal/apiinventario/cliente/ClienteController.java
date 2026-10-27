@@ -24,7 +24,7 @@ public class ClienteController {
 
     @GetMapping
     public List<ClienteResponse> listar() {
-        return clienteService.Listar();
+        return clienteService.listar();
     }
 
     @GetMapping("/documento/{tipo}/{numero}")

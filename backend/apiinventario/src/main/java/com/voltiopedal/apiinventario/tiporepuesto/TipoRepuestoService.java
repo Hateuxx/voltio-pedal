@@ -15,7 +15,7 @@ public class TipoRepuestoService {
     }
 
     /*METODO LISTAR */
-    public List<TipoRepuestoResponse> Listar(){
+    public List<TipoRepuestoResponse> listar(){
         return tipoRepuestoRepository.findAllByOrderByNombreAsc().stream().map(this::aResponse).toList();
     }
 
