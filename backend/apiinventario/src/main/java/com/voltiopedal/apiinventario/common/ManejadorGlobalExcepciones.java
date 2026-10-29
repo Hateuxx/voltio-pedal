@@ -97,7 +97,6 @@ public class ManejadorGlobalExcepciones {
 
     @ExceptionHandler(CredencialesInvalidasException.class)
     public ResponseEntity<ProblemDetail> manejarCredencialesInvalidas(CredencialesInvalidasException ex) {
-        log.warn("Intento de login fallido: {}", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
         problem.setTitle("Credenciales Inválidas");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
@@ -105,7 +104,6 @@ public class ManejadorGlobalExcepciones {
 
     @ExceptionHandler(CuentaBloqueadaException.class)
     public ResponseEntity<ProblemDetail> manejarCuentaBloqueada(CuentaBloqueadaException ex) {
-        log.warn("Intento de login en cuenta bloqueada. {}", ex.getMessage());
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
         problem.setTitle("Cuenta Bloqueada");
 
