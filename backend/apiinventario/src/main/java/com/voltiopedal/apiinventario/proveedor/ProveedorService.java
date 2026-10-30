@@ -41,7 +41,7 @@ public class ProveedorService {
      */
     @Transactional
     public ProveedorResponse registrar(ProveedorRequest request) {
-        /* 1ero Buscar siel RUC ya existe y guardamos el resultado en la caja Optional */
+        /* 1ero Buscar siel RUC ya existé y guardamos el resultado en la caja Optional */
         Optional<Proveedor> existente = proveedorRepository.findByRuc(request.ruc());
 
         if(existente.isPresent()) {             /* ¿hay algo en la caja? */
@@ -71,6 +71,38 @@ public class ProveedorService {
 
         Proveedor guardado = proveedorRepository.save(proveedor);
         return aResponse(guardado);
+    }
+
+    @Transactional 
+    public ProveedorResponse actualizar(Integer id, ProveedorRequest request) {
+        Proveedor proveedor = proveedorRepository.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el proveedor con ID: " + id));
+
+    
+    proveedorRepository.findByRuc(request.ruc()).ifPresent(existente -> {
+        if (!existente.getIdProveedor().equals(id)) {
+            throw new ReglaNegocioException("El RUC ya está registrado por otro proveedor.");
+        }
+    });
+
+        proveedor.setRuc(request.ruc());
+        proveedor.setRazonSocial(request.razonSocial());
+        proveedor.setContacto(request.contacto());
+        proveedor.setTelefono(request.telefono());
+        proveedor.setRubro(request.rubro());
+        proveedor.setFrecuenciaEntrega(request.frecuenciaEntrega());
+
+        return aResponse(proveedor);
+    }
+    
+    @Transactional 
+    public void darDeBaja(Integer id) {
+        Proveedor proveedor = proveedorRepository.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el proveedor con ID: " + id));
+
+        if (!proveedor.getActivo()) {
+            throw new ReglaNegocioException("El proveedor ya está dado de baja.");
+        }
+
+        proveedor.setActivo(false);
     }
 
     /* MÉTODO PRIVADO DRY: Convierte Entidad ->Response */

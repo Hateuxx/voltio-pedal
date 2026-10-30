@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController 
 @RequestMapping("/api/proveedores") /* En plural por convencion REST */
@@ -35,5 +39,18 @@ public class ProveedorController {
         ProveedorResponse creado = proveedorService.registrar(request);
         /* Retornamos 201 CREATED en lugar del 200 OK por defecto*/
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
+
+    /* PUT /api/proveedores */
+    @PutMapping("/{id}")
+    public ProveedorResponse actualizar(@PathVariable Integer id, @Valid @RequestBody ProveedorRequest request) {       
+        return proveedorService.actualizar(id, request);
+    }
+
+    /* DELETE /api/proveedores */
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void darDeBaja(@PathVariable Integer id) {
+        proveedorService.darDeBaja(id);
     }
 }
