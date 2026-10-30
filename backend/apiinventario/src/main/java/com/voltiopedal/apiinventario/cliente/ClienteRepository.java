@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
 
-    /* Pregunta si ya existe un cliente con ese tipo y número de documento */
-    boolean existsByTipoDocumentoAndNumeroDocumento(TipoDocumentoCliente tipoDocumento, String numeroDocumento);
+    /* ==============================
+     *          CONSULTAS
+     * ============================== */
 
     /*Busca un cliente por tipo y número de documento */
     Optional<Cliente> findByTipoDocumentoAndNumeroDocumento( TipoDocumentoCliente tipoDocumento, String numeroDocumento);
@@ -17,5 +18,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
     /* Lista todos los clientes ordenados alfabéticamente por nombres*/
     List<Cliente> findAllByOrderByNombresAsc();
 
+    /* ==============================
+     *   VALIDACIONES DE DUPLICADO
+     * ============================== */
+
+    /* Pregunta si ya existe un cliente con ese tipo y número de documento */
+    boolean existsByTipoDocumentoAndNumeroDocumento(TipoDocumentoCliente tipoDocumento, String numeroDocumento);
 
 }

@@ -16,19 +16,9 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    /* Listar */
-    public List<ClienteResponse> listar() {
-        return clienteRepository.findAllByOrderByNombresAsc().stream().map(this::aResponse).toList();
-    }
-
-    /* Buscar por Documento */
-    public ClienteResponse buscarPorDocumento(TipoDocumentoCliente tipoDocumento, String numeroDocumento) {
-        Cliente cliente = clienteRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento)
-                .orElseThrow(
-                        () -> new RecursoNoEncontradoException(
-                                "No se encontró ningún cliente con el documento: " + numeroDocumento));
-        return aResponse(cliente);
-    }
+    /* ==============================
+     *          C - CREAR
+     * ============================== */
 
     /* Registrar */
     @Transactional
@@ -71,6 +61,28 @@ public class ClienteService {
 
         return aResponse(guardado);
     }
+
+    /* ==============================
+     *          R - CONSULTAR
+     * ============================== */
+
+    /* Listar */
+    public List<ClienteResponse> listar() {
+        return clienteRepository.findAllByOrderByNombresAsc().stream().map(this::aResponse).toList();
+    }
+
+    /* Buscar por Documento */
+    public ClienteResponse buscarPorDocumento(TipoDocumentoCliente tipoDocumento, String numeroDocumento) {
+        Cliente cliente = clienteRepository.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento)
+                .orElseThrow(
+                        () -> new RecursoNoEncontradoException(
+                                "No se encontró ningún cliente con el documento: " + numeroDocumento));
+        return aResponse(cliente);
+    }
+
+    /* ==============================
+     *       MÉTODOS AUXILIARES
+     * ============================== */
 
     /* Limpia un texto opcional: quita espacios y devuelve null si queda vacío */
     private String limpiarOpcional(String texto) {
