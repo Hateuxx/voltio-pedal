@@ -122,6 +122,12 @@ public class ProveedorService {
     @Transactional
     public void desactivar(Integer id) {
         Proveedor proveedor = obtenerPorId(id);
+
+        /* Si ya estaba dado de baja, se informa con un 409 en lugar de repetir la operación */
+        if (!proveedor.getActivo()) {
+            throw new ReglaNegocioException("El proveedor ya está dado de baja.");
+        }
+
         proveedor.setActivo(false);
         proveedorRepository.save(proveedor);
     }

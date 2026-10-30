@@ -5,13 +5,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import com.voltiopedal.apiinventario.auth.CredencialesInvalidasException;
+import com.voltiopedal.apiinventario.auth.CuentaBloqueadaException;
+
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.util.Map;
+import java.time.Instant;
 import java.util.HashMap;
+import java.time.Duration;
 
 @RestControllerAdvice 
 public class ManejadorGlobalExcepciones {
@@ -85,5 +93,36 @@ public class ManejadorGlobalExcepciones {
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "El cuerpo de la petición tiene un formato incorrecto. Verifique la sintaxis del JSON");
         problema.setTitle("Petición mal formada");
         return problema;
+    }
+
+    @ExceptionHandler(CredencialesInvalidasException.class)
+    public ResponseEntity<ProblemDetail> manejarCredencialesInvalidas(CredencialesInvalidasException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problem.setTitle("Credenciales Inválidas");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
+    }
+
+    @ExceptionHandler(CuentaBloqueadaException.class)
+    public ResponseEntity<ProblemDetail> manejarCuentaBloqueada(CuentaBloqueadaException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+        problem.setTitle("Cuenta Bloqueada");
+
+        /* Redondeo seguro hacia arriba para evitar peticiones prematuras */
+        long millisRestantes = Duration.between(Instant.now(), ex.getBloqueadoHasta()).toMillis();
+        long segundosRestantes = (long) Math.ceil(millisRestantes / 1000.0);
+        /* Evita valores negativos si el tiempo pasó justo en ese milisegundo */
+        segundosRestantes = Math.max(1, segundosRestantes);
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header("Retry-After", String.valueOf(segundosRestantes))
+                .body(problem);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ProblemDetail> manejarNoResourceFound(NoResourceFoundException ex) {
+        log.warn("Ruta no encontrada: {}", ex.getResourcePath());
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "La ruta solicitada no existe o fue escrita incorrectamente.");
+        problem.setTitle("Recurso No Encontrado");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
 }
