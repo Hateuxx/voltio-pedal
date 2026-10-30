@@ -6,12 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
-
-@RestController 
+@RestController
 @RequestMapping("/api/proveedores") /* En plural por convencion REST */
 public class ProveedorController {
     private final ProveedorService proveedorService;
@@ -21,8 +17,24 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
+    /* ==============================
+     *          C - CREAR
+     * ============================== */
+
+    /* POST /api/proveedores */
+    @PostMapping
+    public ResponseEntity<ProveedorResponse> registrar(@Valid @RequestBody ProveedorRequest request) {
+        ProveedorResponse creado = proveedorService.registrar(request);
+        /* Retornamos 201 CREATED en lugar del 200 OK por defecto */
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
+
+    /* ==============================
+     *          R - CONSULTAR
+     * ============================== */
+
     /* GET /api/proveedores */
-    @GetMapping 
+    @GetMapping
     public List<ProveedorResponse> listarActivos() {
         return proveedorService.listarActivos();
     }
@@ -33,24 +45,41 @@ public class ProveedorController {
         return proveedorService.buscarPorRuc(ruc);
     }
 
-    /* POST /api/proveedores */
-    @PostMapping 
-    public ResponseEntity<ProveedorResponse> registrar(@Valid @RequestBody ProveedorRequest request) {
-        ProveedorResponse creado = proveedorService.registrar(request);
-        /* Retornamos 201 CREATED en lugar del 200 OK por defecto*/
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    /* GET /api/proveedores/{id} */
+    @GetMapping("/{id}")
+    public ProveedorResponse buscarPorId(@PathVariable Integer id) {
+        return proveedorService.buscarPorId(id);
     }
 
-    /* PUT /api/proveedores */
+    /* ==============================
+     *          U - ACTUALIZAR
+     * ============================== */
+
+    /* PUT /api/proveedores/{id} */
     @PutMapping("/{id}")
-    public ProveedorResponse actualizar(@PathVariable Integer id, @Valid @RequestBody ProveedorRequest request) {       
+    public ProveedorResponse actualizar(@PathVariable Integer id, @Valid @RequestBody ProveedorRequest request) {
         return proveedorService.actualizar(id, request);
     }
 
-    /* DELETE /api/proveedores */
+    /* ==============================
+     *       D - ELIMINAR LÓGICO
+     * ============================== */
+
+    /* DELETE /api/proveedores/{id} -> eliminación lógica */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void darDeBaja(@PathVariable Integer id) {
-        proveedorService.darDeBaja(id);
+    public ResponseEntity<Void> desactivar(@PathVariable Integer id) {
+        proveedorService.desactivar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /* ==============================
+     *       D - ELIMINAR FÍSICO
+     * ============================== */
+
+    /* DELETE /api/proveedores/{id}/fisico -> eliminación física */
+    @DeleteMapping("/{id}/fisico")
+    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id) {
+        proveedorService.eliminarFisico(id);
+        return ResponseEntity.noContent().build();
     }
 }
