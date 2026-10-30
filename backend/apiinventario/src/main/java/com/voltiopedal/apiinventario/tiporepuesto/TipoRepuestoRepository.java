@@ -6,9 +6,20 @@ import java.util.List;
 
 public interface TipoRepuestoRepository extends JpaRepository<TipoRepuesto, Integer>{
 
-    /*Pregunta si ya existe un repuesto con ese nombre */
-    boolean existsByNombre(String nombre);
+    /* ==============================
+     *          CONSULTAS
+     * ============================== */
 
     /*Metodo para listar por orden alfabetico */
     List<TipoRepuesto> findAllByOrderByNombreAsc();
+
+    /* ==============================
+     *   VALIDACIONES DE DUPLICADO
+     * ============================== */
+
+    /*Pregunta si ya existe un repuesto con ese nombre */
+    boolean existsByNombre(String nombre);
+
+    /* Verifica si OTRO tipo (con id distinto) ya usa ese nombre */
+    boolean existsByNombreAndIdTipoRepuestoNot(String nombre, Integer id);
 }
