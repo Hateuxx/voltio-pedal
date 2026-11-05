@@ -16,6 +16,9 @@ import com.voltiopedal.apiinventario.auth.CuentaBloqueadaException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+
 import java.util.Map;
 import java.time.Instant;
 import java.util.HashMap;
@@ -124,5 +127,36 @@ public class ManejadorGlobalExcepciones {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "La ruta solicitada no existe o fue escrita incorrectamente.");
         problem.setTitle("Recurso No Encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+    }
+
+    /* Manejador para id con letras (400) */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetail> manejarTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String parametro = ex.getName();
+        String tipoEsperado = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "Desconocido";
+
+        log.warn("Fallo de conversión en el parámetro '{}'. Se esperaba el tipo '{}' ", parametro, tipoEsperado);
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "El parámetro '" + parametro + "' debe ser de tipo " + tipoEsperado + ".");
+        problem.setTitle("Tipo de Argumento Inválido");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    /* Manejador para método HTTP incorrecto (405) */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ProblemDetail> manejarMetodoNoSoportado(HttpRequestMethodNotSupportedException ex) {
+        log.warn("Intento de acceso con método no soportado: {}", ex.getMethod());
+
+        ProblemDetail problem = ProblemDetail .forStatusAndDetail(HttpStatus.METHOD_NOT_ALLOWED, "El método HTTP " + ex.getMethod() + " no está soportado en esta ruta.");
+        problem.setTitle("Método No Permitido");
+
+        /* Obtener los métodos permitidos (ej. ["GET", "POST"]) y unirlos por coma */
+        String metodosPermitidos = "";
+        if(ex.getSupportedMethods() != null) {
+            metodosPermitidos = String.join(", ", ex.getSupportedMethods());
+        }
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).header("Allow", metodosPermitidos).body(problem);
     }
 }
