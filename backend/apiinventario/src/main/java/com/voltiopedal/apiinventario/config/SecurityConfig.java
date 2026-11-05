@@ -51,6 +51,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/clientes").hasAnyRole(ADMIN, OPERADOR)
                 .requestMatchers("/api/clientes", "/api/clientes/**").hasRole(ADMIN)
 
+                /* Inactivos: solo el administrador (debe ir ANTES de la regla GET general) */
+                .requestMatchers(HttpMethod.GET, "/api/proveedores/inactivos").hasRole(ADMIN)
+
                 /* Proveedores: consultar (admin y operador), lo demás solo admin */
                 .requestMatchers(HttpMethod.GET, "/api/proveedores", "/api/proveedores/**").hasAnyRole(ADMIN, OPERADOR)
                 .requestMatchers("/api/proveedores", "/api/proveedores/**").hasRole(ADMIN)

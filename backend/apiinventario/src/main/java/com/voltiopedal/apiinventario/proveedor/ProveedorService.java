@@ -149,6 +149,22 @@ public class ProveedorService {
         proveedorRepository.flush();
     }
 
+    @Transactional(readOnly = true)
+    public List<ProveedorResponse> listarInactivos() {
+        return proveedorRepository.findByActivoFalse().stream().map(this::aResponse)/* 0 proveedor -> aResponse(proveedor) */.toList();
+    }
+
+    @Transactional 
+    public void reactivar(Integer id) {
+        Proveedor proveedor = obtenerPorId(id);
+
+        if (proveedor.getActivo()) {
+            throw new ReglaNegocioException("El proveedor ya está activo.");
+        }
+
+        proveedor.setActivo(true);
+    }
+
     /* ==============================
      *       MÉTODOS AUXILIARES
      * ============================== */

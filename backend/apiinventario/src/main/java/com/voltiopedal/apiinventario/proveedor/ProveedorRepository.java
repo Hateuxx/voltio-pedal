@@ -18,6 +18,8 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer>{
     /* 3. Listar solo los proveedores activos */
     List<Proveedor> findByActivoTrue();
 
+    List<Proveedor> findByActivoFalse();
+
     /* ==============================
      *   VALIDACIONES DE DUPLICADO
      * ============================== */

@@ -17,9 +17,11 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
-    /* ==============================
-     *          C - CREAR
-     * ============================== */
+    /*
+     * ==============================
+     * C - CREAR
+     * ==============================
+     */
 
     /* POST /api/proveedores */
     @PostMapping
@@ -29,9 +31,11 @@ public class ProveedorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    /* ==============================
-     *          R - CONSULTAR
-     * ============================== */
+    /*
+     * ==============================
+     * R - CONSULTAR
+     * ==============================
+     */
 
     /* GET /api/proveedores */
     @GetMapping
@@ -51,9 +55,11 @@ public class ProveedorController {
         return proveedorService.buscarPorId(id);
     }
 
-    /* ==============================
-     *          U - ACTUALIZAR
-     * ============================== */
+    /*
+     * ==============================
+     * U - ACTUALIZAR
+     * ==============================
+     */
 
     /* PUT /api/proveedores/{id} */
     @PutMapping("/{id}")
@@ -61,9 +67,11 @@ public class ProveedorController {
         return proveedorService.actualizar(id, request);
     }
 
-    /* ==============================
-     *       D - ELIMINAR LÓGICO
-     * ============================== */
+    /*
+     * ==============================
+     * D - ELIMINAR LÓGICO
+     * ==============================
+     */
 
     /* DELETE /api/proveedores/{id} -> eliminación lógica */
     @DeleteMapping("/{id}")
@@ -72,14 +80,28 @@ public class ProveedorController {
         return ResponseEntity.noContent().build();
     }
 
-    /* ==============================
-     *       D - ELIMINAR FÍSICO
-     * ============================== */
+    /*
+     * ==============================
+     * D - ELIMINAR FÍSICO
+     * ==============================
+     */
 
     /* DELETE /api/proveedores/{id}/fisico -> eliminación física */
     @DeleteMapping("/{id}/fisico")
     public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id) {
         proveedorService.eliminarFisico(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<ProveedorResponse>> listarInactivos() {
+        List<ProveedorResponse> inactivos = proveedorService.listarInactivos();
+        return ResponseEntity.ok(inactivos);
+    }
+
+    @PatchMapping("/{id}/reactivar")
+    public ResponseEntity<Void> reactivar(@PathVariable Integer id) {
+        proveedorService.reactivar(id);
         return ResponseEntity.noContent().build();
     }
 }
