@@ -40,6 +40,9 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/error").permitAll()
 
+                /* Añadir /actuator/health a la lista de permitAll() */
+                .requestMatchers("/actuator/health").permitAll()
+
                 /* Usuarios: solo el administrador */
                 .requestMatchers("/api/usuarios", "/api/usuarios/**").hasRole(ADMIN)
 
@@ -55,6 +58,10 @@ public class SecurityConfig {
                 /* Tipos de repuesto: consultar (todos), lo demás solo admin */
                 .requestMatchers(HttpMethod.GET, "/api/tipos-repuesto", "/api/tipos-repuesto/**").hasAnyRole(ADMIN, OPERADOR, TECNICO)
                 .requestMatchers("/api/tipos-repuesto", "/api/tipos-repuesto/**").hasRole(ADMIN)
+
+                /* Regla específica POST antes de la regla general */
+                /* Se habilita POST para Operador y Admin en preparación para el futuro módulo de ingresos */
+                .requestMatchers(HttpMethod.POST, "/api/ingresos").hasAnyRole(ADMIN, OPERADOR)
 
                 /* Ingresos de mercadería: consultar (admin y operador), lo demás solo admin */
                 .requestMatchers(HttpMethod.GET, "/api/ingresos", "/api/ingresos/**").hasAnyRole(ADMIN, OPERADOR)
