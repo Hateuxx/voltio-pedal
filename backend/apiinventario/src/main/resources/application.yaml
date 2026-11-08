@@ -22,7 +22,7 @@ app:
     respuesta-seguridad: ${ADMIN_RESPUESTA:}
   jwt:
     secreto: ${JWT_SECRET:}
-    expiracion: 8h
+    expiracion: 1h
   seguridad:
     intentos-maximos: 5
     bloqueo: 15m

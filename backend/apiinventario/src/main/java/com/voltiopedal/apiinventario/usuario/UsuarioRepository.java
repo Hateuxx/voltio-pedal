@@ -12,4 +12,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     /* Método para saber si ya existe algún usuario con un rol específico */
     boolean existsByRol(Rol rol);
+
+    /* Firma para contrar los activos */
+    long countByRolAndActivoTrue(Rol rol);
 }
