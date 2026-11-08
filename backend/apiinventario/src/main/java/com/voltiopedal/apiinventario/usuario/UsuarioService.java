@@ -1,9 +1,12 @@
 package com.voltiopedal.apiinventario.usuario;
 
+import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service 
 public class UsuarioService {
@@ -49,6 +52,46 @@ public class UsuarioService {
         Usuario guardado = usuarioRepository.save(usuario);
 
         return aResponse(guardado);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponse> listar() {
+        return usuarioRepository.findAll().stream().map(this::aResponse).toList();
+    }
+
+    private Usuario obtenerPorId(Integer id) {
+        return usuarioRepository.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el usuario con ID: " + id));
+    }
+
+    @Transactional 
+    public void desactivar(Integer id, Integer idSolicitante) {
+        Usuario usuario = obtenerPorId(id);
+
+        /* Se usa.equals() para objetos Integer */
+        if (id.equals(idSolicitante)) {
+            throw new ReglaNegocioException("No puede desactivar su propia cuenta.");
+        }
+
+        /* Espejo de proveedor */
+        if(!usuario.getActivo()) {
+            throw new ReglaNegocioException("El usuario ya está desactivado.");
+        }
+
+        /* Verifica que no sea el último admin */
+        if (usuario.getRol() == Rol.ADMINISTRADOR && usuarioRepository.countByRolAndActivoTrue(Rol.ADMINISTRADOR) <= 1) {
+            throw new ReglaNegocioException("No se puede desactivar al último administrador activo.");
+        }
+
+        usuario.setActivo(false);
+    }
+
+    @Transactional 
+    public void reactivar(Integer id) {
+        Usuario usuario= obtenerPorId(id);
+        if (usuario.getActivo()) {
+            throw new ReglaNegocioException("El usuario ya está activo.");
+        }
+        usuario.setActivo(true);
     }
 
     private UsuarioResponse aResponse(Usuario u) {
