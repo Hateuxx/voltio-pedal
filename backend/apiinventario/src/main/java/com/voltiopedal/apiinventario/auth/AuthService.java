@@ -12,11 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service 
 public class AuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
+
+    /* Lista de señuelos */
+    private static final List<String> PREGUNTAS_SENUELO = List.of(
+        "¿Nombre de tu primera mascota?",
+        "¿Ciudad donde naciste?",
+        "¿Nombre de tu colegio de primaria?",
+        "¿Comida favorita?"
+    );
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -53,7 +62,8 @@ public class AuthService {
         }
 
         Usuario usuario = optUsuario.get();
-        validarSecreto(usuario, solicitud.contrasena(), usuario.getContrasena());
+        /* Llamada agregando el 4to parámetro */
+        validarSecreto(usuario, solicitud.contrasena(), usuario.getContrasena(), "Usuario o contraseña incorrectos.");
 
         /* Generar token y retornar */
         var tokenData = servicioToken.crearToken(usuario);
@@ -66,7 +76,43 @@ public class AuthService {
         );
     }
 
-    private void validarSecreto(Usuario usuario, String secretoPlano, String hashGuardado) {
+    /* Metodos nuevos completos */
+    @Transactional(readOnly = true)
+    public PreguntaResponse obtenerPregunta(PreguntaRequest solicitud) {
+        var optUsuario = usuarioRepository.findByTipoDocumentoAndNumeroDocumento(solicitud.tipoDocumento(), solicitud.numeroDocumento());
+
+        /* No existe o inactivo: señuelo determinista (mismo DNI -> misma pregunta) */
+        if(optUsuario.isEmpty() || !optUsuario.get().getActivo()) {
+            int indice = Math.floorMod(solicitud.numeroDocumento().hashCode(), PREGUNTAS_SENUELO.size());
+            return new PreguntaResponse(PREGUNTAS_SENUELO.get(indice));
+        }
+
+        return new PreguntaResponse(optUsuario.get().getPreguntaSeguridad());
+    }
+
+    @Transactional(noRollbackFor = {CredencialesInvalidasException.class, CuentaBloqueadaException.class})
+    public void restablecer(RestablecerRequest solicitud) {
+        /* Normalizar igual que al registrar */
+        String respuesta = solicitud.respuestaSeguridad().trim().toLowerCase();
+
+        var optUsuario = usuarioRepository.findByTipoDocumentoAndNumeroDocumento(solicitud.tipoDocumento(), solicitud.numeroDocumento());
+
+        /* No existe o inactivo: mismo costo y mismo mensaje */
+        if (optUsuario.isEmpty() || !optUsuario.get().getActivo()) {
+            passwordEncoder.matches(respuesta, dummyHash);
+            log.warn("Intento de recuperación fallido para documento {} {}", solicitud.tipoDocumento(), solicitud.numeroDocumento());
+            throw new CredencialesInvalidasException("Documento o respuesta incorrectos.");
+        }
+
+        Usuario usuario = optUsuario.get();
+        validarSecreto(usuario, respuesta, usuario.getRespuestaSeguridad(), "Documento o respuesta incorrectos.");
+
+        /* Nueva contraseña hasheada (validarSecreto ya reinició el contador) */
+        usuario.setContrasena(passwordEncoder.encode(solicitud.nuevaContrasena()));
+        log.info("Contraseña restablecida para documento {} {}", usuario.getTipoDocumento(), usuario.getNumeroDocumento());
+    }
+
+    private void validarSecreto(Usuario usuario, String secretoPlano, String hashGuardado, String mensajeError) {
         LocalDateTime ahora = LocalDateTime.now();
 
         /* Bloqueado actualmente -> 429 */
@@ -93,7 +139,7 @@ public class AuthService {
             }
 
             log.warn("Intento fallido ({}/{}) para documento {} {}", nuevoIntentos, maxIntentos, usuario.getTipoDocumento(), usuario.getNumeroDocumento());
-            throw new CredencialesInvalidasException("Usuario o contraseña incorrectos.");
+            throw new CredencialesInvalidasException(mensajeError);
         }
 
         /* Acierto -> reiniciar */

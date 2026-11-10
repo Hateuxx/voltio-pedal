@@ -40,6 +40,9 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/error").permitAll()
 
+                /* Recuperación de cuenta */
+                .requestMatchers(HttpMethod.POST, "/api/auth/recuperar/pregunta", "/api/auth/recuperar/restablecer").permitAll()
+
                 /* Añadir /actuator/health a la lista de permitAll() */
                 .requestMatchers("/actuator/health").permitAll()
 
