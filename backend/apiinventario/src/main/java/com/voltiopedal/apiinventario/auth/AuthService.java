@@ -2,6 +2,7 @@ package com.voltiopedal.apiinventario.auth;
 
 import com.voltiopedal.apiinventario.usuario.Usuario;
 import com.voltiopedal.apiinventario.usuario.UsuarioRepository;
+import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,6 +146,23 @@ public class AuthService {
         /* Acierto -> reiniciar */
         usuario.setIntentosFallidos((byte) 0);
         usuario.setBloqueadoHasta(null);
+    }
+
+    @Transactional(noRollbackFor = {CredencialesInvalidasException.class, CuentaBloqueadaException.class})
+    public void cambiarContrasena(Integer idUsuario, CambiarContrasenaRequest solicitud) {
+        /* token huérfano -> no puede cambiar la contraseña */
+        Usuario usuario = usuarioRepository.findById(idUsuario).filter(u -> u.getActivo()).orElseThrow(() -> new CredencialesInvalidasException("Sesión no válida"));
+
+        /* reutilizar el bloqueo por intentos - aquí el mensaje puede ser específico */
+        validarSecreto(usuario, solicitud.contrasenaActual(), usuario.getContrasena(), "La contraseña actual es incorrecta.");
+
+        /* Evitar que ponga la misma contraseña, validando DESPUES del secreto  */
+        if (passwordEncoder.matches(solicitud.nuevaContrasena(), usuario.getContrasena())) {
+            throw new ReglaNegocioException("La nueva contraseña debe ser distinta a la actual.");
+        }
+
+        usuario.setContrasena(passwordEncoder.encode(solicitud.nuevaContrasena()));
+        log.info("Contraseña cambiada por el propio usuario {} {}", usuario.getTipoDocumento(), usuario.getNumeroDocumento());
     }
         
 }
