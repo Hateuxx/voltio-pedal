@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,8 +15,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
+import java.util.List;
 
 /* Seguridad de la API: valida el token JWT en cada petición y aplica los permisos por rol */
 @Configuration 
@@ -29,6 +35,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            /* CORS */
+            .cors(Customizer.withDefaults())
             /* CSRF se desactiva: la API no usa cookies ni sesión, solo token en cada petición */
             .csrf(csrf -> csrf.disable())
             /* Sin sesión en el servidor: cada petición debe traer su token */
@@ -121,6 +129,22 @@ public class SecurityConfig {
         response.setContentType("application/problem+json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("{\"status\":" + estado + ",\"title\":\"" + titulo + "\",\"detail\":\"" + detalle + "\"}");
+    }
+
+    /* Configuración de CORS para REACT/VITE se comuniqué con mi backend mediante las peticiones de Localhost */
+    @Bean 
+    public CorsConfigurationSource corsConfigurationSource( @Value("${app.cors.origenes-permitidos}") List <String> origenes) {
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(origenes);
+        config.setAllowedMethods(List.of("GET", "POST","PUT" , "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setExposedHeaders(List.of("Retry-After", "Allow"));
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource fuente = new UrlBasedCorsConfigurationSource();
+        fuente.registerCorsConfiguration("/api/**", config);
+        return fuente;
     }
 }
 
