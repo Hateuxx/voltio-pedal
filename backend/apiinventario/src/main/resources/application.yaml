@@ -13,6 +13,8 @@ spring:
       ddl-auto: validate
     open-in-view: false
 app:
+  cors:
+    origenes-permitidos: ${CORS_ORIGENES:http://localhost:5173}
   admin:
     numero-documento: "70000001"
     nombres: "Administrador"
