@@ -34,3 +34,4 @@ build/
 
 #Script local de arranque con credenciales
 iniciar.ps1
+iniciar.sh
