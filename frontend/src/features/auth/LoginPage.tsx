@@ -19,7 +19,7 @@ function LoginPage() {
         try {
             const respuesta = await login({ tipoDocumento: 'DNI', numeroDocumento, contrasena})
             guardarSesion(respuesta)
-            navigate('/proveedores', { replace: true })
+            navigate('/inicio', { replace: true })
         } catch (err) {
             if (err instanceof ErrorApi) {
                 setError(err.problema.detail) /* 401, 429, 400... el mensaje del backend  */
