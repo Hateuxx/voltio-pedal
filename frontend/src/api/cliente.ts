@@ -1,4 +1,4 @@
-import { obtenerToken } from "../features/auth/sesion"
+import { cerrarSesion, obtenerToken } from "../features/auth/sesion"
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -32,11 +32,19 @@ export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<
         },
     })
 
-    /* 204: backend no envía cuerpo (desactivar, reactivar, restablecer...) */
+    /* Revisar el 401 (no depende de que exista el cuerpo JSON) */
+    if (respuesta.status === 401 && token) {
+        cerrarSesion()
+        window.location.replace('/login')
+        return new Promise<T>(() => {})
+    }
+
+    /* 204: Repuestas exitosas sin cuerpo (desactivar, reactivar, restablecer...)-(DELETE 204 No Content) */
     if (respuesta.status === 204) {
         return undefined as T
     }
 
+    /* Recién aquí parseo el JSON (datos o ProblemDetail) */
     const cuerpo = await respuesta.json()
 
     if (!respuesta.ok) {
