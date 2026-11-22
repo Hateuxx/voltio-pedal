@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { login } from './authApi'
 import { ErrorApi } from '../../api/cliente'
+import { useNavigate } from 'react-router-dom'
+import { guardarSesion } from './sesion'
 
 function LoginPage() {
     const [numeroDocumento, setNumeroDocumento] = useState('')
     const [contrasena, setContrasena] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [cargando, setCargando] = useState(false)
+    const navigate = useNavigate()
 
     async function manejarEnvio(e: React.FormEvent) {
         e.preventDefault()
@@ -15,8 +18,8 @@ function LoginPage() {
 
         try {
             const respuesta = await login({ tipoDocumento: 'DNI', numeroDocumento, contrasena})
-            localStorage.setItem('token', respuesta.token)
-            alert(`Bienvenido, ${respuesta.nombres} (${respuesta.rol})`) /* temporal: luego navegaremos */
+            guardarSesion(respuesta)
+            navigate('/proveedores', { replace: true })
         } catch (err) {
             if (err instanceof ErrorApi) {
                 setError(err.problema.detail) /* 401, 429, 400... el mensaje del backend  */

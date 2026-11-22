@@ -1,3 +1,5 @@
+import { obtenerToken } from "../features/auth/sesion"
+
 const API_URL = import.meta.env.VITE_API_URL
 
 /* Forma de los errores del backend: el ProblemDetail de ManejadorGlobalExcepciones */
@@ -19,7 +21,7 @@ export class ErrorApi extends Error {
 }
 
 export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<T> {
-    const token = localStorage.getItem('token')
+    const token = obtenerToken()
 
     const respuesta = await fetch(`${API_URL}${ruta}`, {
         ...opciones,
