@@ -1,4 +1,4 @@
-import { obtenerToken } from "../features/auth/sesion"
+import { cerrarSesion, obtenerToken } from "../features/auth/sesion"
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -38,6 +38,11 @@ export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<
     }
 
     const cuerpo = await respuesta.json()
+
+    if (respuesta.status === 401 && token) {
+        cerrarSesion()
+        window.location.replace('/login')
+    }
 
     if (!respuesta.ok) {
         throw new ErrorApi(cuerpo as ProblemaApi)
