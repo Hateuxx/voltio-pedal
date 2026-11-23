@@ -18,3 +18,20 @@ export interface Proveedor {
 export function listarProveedores() {
     return api<Proveedor[]>('/api/proveedores')
 }
+
+/* Lo que el frontend ENVIA (espejo de ProveedorRequest.java) */
+export interface ProveedorRequest {
+    ruc: string
+    razonSocial: string
+    contacto: string | null
+    telefono: string | null
+    rubro: string | null
+    frecuenciaEntrega: FrecuenciaEntrega
+}
+
+export function crearProveedor(datos: ProveedorRequest) {
+    return api<Proveedor>('/api/proveedores', {
+        method: 'POST',
+        body: JSON.stringify(datos),
+    })
+}
