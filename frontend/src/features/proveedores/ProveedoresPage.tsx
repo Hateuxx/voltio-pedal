@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { listarProveedores, type Proveedor } from './proveedoresApi'
 import { ErrorApi } from '../../api/cliente'
+import { obtenerUsuario } from '../auth/sesion'
 
 function ProveedoresPage() {
     const [proveedores, setProveedores] = useState<Proveedor[]>([])
     const [cargando, setCargando] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const esAdmin = obtenerUsuario()?.rol === 'ADMINISTRADOR'
 
     useEffect(() => {
         listarProveedores()
@@ -18,7 +21,14 @@ function ProveedoresPage() {
 
     return (
         <>
-            <h1 className="h3 text-primary mb-4">Proveedores</h1>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1 className="h3 text-primary mb-0">Proveedores</h1>
+                {esAdmin && (
+                    <Link to="/proveedores/nuevo" className="btn btn-success">
+                        Nuevo proveedor
+                    </Link>
+                )}
+            </div>
 
             {cargando && <p className="text-muted">Cargando proveedores...</p>}
             {error && <div className="alert alert-danger">{error}</div>}
