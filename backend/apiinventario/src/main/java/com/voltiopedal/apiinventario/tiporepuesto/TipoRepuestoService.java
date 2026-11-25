@@ -1,5 +1,6 @@
 package com.voltiopedal.apiinventario.tiporepuesto;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
@@ -81,10 +82,12 @@ public class TipoRepuestoService {
     @Transactional
     public void eliminarFisico(Integer id) {
         TipoRepuesto tipo = obtenerPorId(id);
-        tipoRepuestoRepository.delete(tipo);
-        /* flush ejecuta el DELETE ahora mismo; si algún repuesto usa este tipo,
-         * la base de datos lo rechaza aquí y el usuario recibe el 409 */
-        tipoRepuestoRepository.flush();
+        try {
+            tipoRepuestoRepository.delete(tipo);
+            tipoRepuestoRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new ReglaNegocioException("No se puede eliminar el tipo de respuesto que lo usan.");
+        }
     }
 
     /* ==============================

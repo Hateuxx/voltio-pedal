@@ -4,12 +4,8 @@ import {
     darDeBajaProveedor, eliminarProveedor, listarProveedores,
     listarProveedoresInactivos, reactivarProveedor, type Proveedor,
 } from './proveedoresApi'
-import { ErrorApi } from '../../api/cliente'
+import { mensajeDeError } from '../../api/cliente'
 import { obtenerUsuario } from '../auth/sesion'
-
-function mensajeDe(err: unknown) {
-    return err instanceof ErrorApi ? err.problema.detail : 'No se pudo conectar con el servidor.'
-}
 
 function ProveedoresPage() {
     const [proveedores, setProveedores] = useState<Proveedor[]>([])
@@ -29,7 +25,7 @@ function ProveedoresPage() {
                 setProveedores(lista)
                 setError(null)
             })
-            .catch(err => { if (vigente) setError(mensajeDe(err)) })
+            .catch(err => { if (vigente) setError(mensajeDeError(err)) })
             .finally(() => { if (vigente) setCargando(false) })
         return () => { vigente = false }
     }, [verInactivos, recargar])
@@ -47,7 +43,7 @@ function ProveedoresPage() {
             await accion()
             setRecargar(n => n + 1)
         } catch (err) {
-            setErrorAccion(mensajeDe(err))
+            setErrorAccion(mensajeDeError(err))
         }
     }
 

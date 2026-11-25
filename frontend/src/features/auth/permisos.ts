@@ -9,6 +9,7 @@ export interface OpcionMenu {
 /* Espejo de la tabla "Roles y permisos" del README */
 export const MENU: OpcionMenu[] = [
     { ruta: '/proveedores', texto: 'Proveedores', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA']},
+    { ruta: '/tipos-repuesto', texto: 'Tipos de repuesto', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
 ]
 
 export function rolesDe(ruta: string): RolUsuario[] {

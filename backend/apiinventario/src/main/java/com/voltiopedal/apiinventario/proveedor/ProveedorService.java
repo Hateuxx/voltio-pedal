@@ -2,6 +2,8 @@ package com.voltiopedal.apiinventario.proveedor;
 
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,13 +142,12 @@ public class ProveedorService {
     @Transactional
     public void eliminarFisico(Integer id) {
         Proveedor proveedor = obtenerPorId(id);
-        proveedorRepository.delete(proveedor);
-        /*
-         * flush ejecuta el DELETE ahora mismo; si el proveedor tiene productos o
-         * ingresos
-         * relacionados, la base de datos lo rechaza aquí y el usuario recibe el 409
-         */
-        proveedorRepository.flush();
+        try {
+            proveedorRepository.delete(proveedor);
+            proveedorRepository.flush();
+        } catch (DataIntegrityViolationException e) {
+            throw new ReglaNegocioException("No se puede eliminar el proveedor porque tiene mercadería o ingresos asociados. Use 'Dar de baja'.");
+        }
     }
 
     @Transactional(readOnly = true)

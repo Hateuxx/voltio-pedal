@@ -6,6 +6,7 @@ import RutaProtegida from './features/auth/RutaProtegida'
 import { rolesDe } from './features/auth/permisos'
 import Layout from './components/Layout'
 import ProveedorFormPage from './features/proveedores/ProveedorFormPage'
+import TiposRepuestoPage from './features/tiposRepuesto/TiposRepuestoPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/proveedores" element={<RutaProtegida roles={rolesDe('/proveedores')}><ProveedoresPage /></RutaProtegida>} />
         <Route path="/proveedores/nuevo" element={<RutaProtegida roles={['ADMINISTRADOR']}><ProveedorFormPage /></RutaProtegida>} />
         <Route path="/proveedores/:id/editar" element={<RutaProtegida roles={['ADMINISTRADOR']}><ProveedorFormPage /></RutaProtegida>} />
+        <Route path="/tipos-repuesto" element={<RutaProtegida roles={rolesDe('/tipos-repuesto')}><TiposRepuestoPage /></RutaProtegida>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/inicio" replace />} />
