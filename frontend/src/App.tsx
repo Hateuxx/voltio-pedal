@@ -16,6 +16,7 @@ function App() {
         <Route path="/inicio" element={<InicioPage />} />
         <Route path="/proveedores" element={<RutaProtegida roles={rolesDe('/proveedores')}><ProveedoresPage /></RutaProtegida>} />
         <Route path="/proveedores/nuevo" element={<RutaProtegida roles={['ADMINISTRADOR']}><ProveedorFormPage /></RutaProtegida>} />
+        <Route path="/proveedores/:id/editar" element={<RutaProtegida roles={['ADMINISTRADOR']}><ProveedorFormPage /></RutaProtegida>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/inicio" replace />} />

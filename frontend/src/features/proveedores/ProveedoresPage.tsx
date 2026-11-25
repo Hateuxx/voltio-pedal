@@ -43,6 +43,7 @@ function ProveedoresPage() {
                             <th>Teléfono</th>
                             <th>Rubro</th>
                             <th>Frecuencia</th>
+                            {esAdmin && <th>Acciones</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -54,6 +55,13 @@ function ProveedoresPage() {
                                 <td>{p.telefono ?? '—'}</td>
                                 <td>{p.rubro ?? '—'}</td>
                                 <td>{p.frecuenciaEntrega}</td>
+                                {esAdmin && (
+                                    <td>
+                                        <Link to={`/proveedores/${p.idProveedor}/editar`} className="btn btn-sm btn-outline-primary">
+                                            Editar
+                                        </Link>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>
