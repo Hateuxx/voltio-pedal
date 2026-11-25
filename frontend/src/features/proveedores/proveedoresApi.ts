@@ -46,3 +46,19 @@ export function actualizarProveedor(id: number, datos: ProveedorRequest) {
         body: JSON.stringify(datos),
     })
 }
+
+export function darDeBajaProveedor(id: number) {
+    return api<void>(`/api/proveedores/${id}`, { method: 'DELETE' })
+}
+
+export function listarProveedoresInactivos() {
+    return api<Proveedor[]>('/api/proveedores/inactivos')
+}
+
+export function reactivarProveedor(id: number) {
+    return api<void>(`/api/proveedores/${id}/reactivar`, { method: 'PATCH' })
+}
+
+export function eliminarProveedor(id: number) {
+    return api<void>(`/api/proveedores/${id}/fisico`, { method: 'DELETE' })
+}
