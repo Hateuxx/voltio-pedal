@@ -83,3 +83,42 @@ export function reactivarMercaderia(id: number) {
 export function eliminarMercaderia(id: number) {
     return api<void>(`${BASE}/${id}/fisico`, { method: 'DELETE' })
 }
+
+export type TipoMovimiento =
+    | 'ENTRADA_PROVEEDOR' | 'DEVOLUCION_PROVEEDOR'
+    | 'SALIDA_VENTA' | 'DEVOLUCION_VENTA'
+    | 'SALIDA_REPARACION' | 'DEVOLUCION_REPARACION'
+    | 'AJUSTE_ENTRADA' | 'AJUSTE_SALIDA'
+
+export const ETIQUETA_MOVIMIENTO: Record<TipoMovimiento, string> = {
+    ENTRADA_PROVEEDOR: 'Entrada por compra',
+    DEVOLUCION_PROVEEDOR: 'Devolución a proveedor',
+    SALIDA_VENTA: 'Salida por venta',
+    DEVOLUCION_VENTA: 'Devolución de cliente',
+    SALIDA_REPARACION: 'Salida a reparación',
+    DEVOLUCION_REPARACION: 'Devolución de reparación',
+    AJUSTE_ENTRADA: 'Ajuste (+)',
+    AJUSTE_SALIDA: 'Ajuste (−)',
+}
+
+/* Espejo de MovimientoResponse.java */
+export interface Movimiento {
+    idMovimiento: number
+    fechaHora: string
+    tipo: TipoMovimiento
+    entrada: boolean
+    cantidad: number
+    stockAnterior: number
+    stockResultante: number
+    usuario: string
+    origen: string
+    observacion: string | null
+}
+
+export function obtenerKardex(id: number) {
+    return api<Movimiento[]>(`${BASE}/${id}/kardex`)
+}
+
+export function listarAlertasStock() {
+    return api<Mercaderia[]>(`${BASE}/alertas-stock`)
+}

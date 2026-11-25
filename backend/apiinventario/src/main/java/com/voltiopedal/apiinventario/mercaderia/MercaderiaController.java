@@ -58,4 +58,10 @@ public class MercaderiaController {
         mercaderiaService.eliminarFisico(id);
         return ResponseEntity.noContent().build();
     }
+
+    /* GET /api/mercaderias/alertas-stock */
+    @GetMapping("/alertas-stock")
+    public List<MercaderiaResponse> alertasStock() {
+        return mercaderiaService.listarStockBajo();
+    }
 }

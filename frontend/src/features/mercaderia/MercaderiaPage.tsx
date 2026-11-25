@@ -129,13 +129,13 @@ export default function MercaderiaPage() {
                             <th>Proveedor</th>
                             <th className="text-center">Stock</th>
                             <th className="text-end">P. venta</th>
-                            {esAdmin && <th>Acciones</th>}
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {visibles.length === 0 && (
                             <tr>
-                                <td colSpan={esAdmin ? 7 : 6} className="text-center text-muted">
+                                <td colSpan={7} className="text-center text-muted">
                                     {mercaderias.length === 0 ? 'No hay mercadería registrada.' : 'Ninguna mercadería coincide con el filtro.'}
                                 </td>
                             </tr>
@@ -159,17 +159,20 @@ export default function MercaderiaPage() {
                                 <td className="text-end text-nowrap">{soles.format(m.precioVenta)}</td>
                                 {esAdmin && (
                                     <td className="text-nowrap">
-                                        {verInactivos ? (
+                                        <Link to={`/mercaderia/${m.idMercaderia}/kardex`} className="btn btn-sm btn-outline-secondary">
+                                            Kardex
+                                        </Link>
+                                        {esAdmin && (verInactivos ? (
                                             <>
-                                                <button className="btn btn-sm btn-outline-success" onClick={() => reactivar(m)}>Reactivar</button>
+                                                <button className="btn btn-sm btn-outline-success ms-2" onClick={() => reactivar(m)}>Reactivar</button>
                                                 <button className="btn btn-sm btn-danger ms-2" onClick={() => eliminar(m)}>Eliminar</button>
                                             </>
                                         ) : (
                                             <>
-                                                <Link to={`/mercaderia/${m.idMercaderia}/editar`} className="btn btn-sm btn-outline-primary">Editar</Link>
+                                                <Link to={`/mercaderia/${m.idMercaderia}/editar`} className="btn btn-sm btn-outline-primary ms-2">Editar</Link>
                                                 <button className="btn btn-sm btn-outline-danger ms-2" onClick={() => darDeBaja(m)}>Dar de baja</button>
                                             </>
-                                        )}
+                                        ))}
                                     </td>
                                 )}
                             </tr>
