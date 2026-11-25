@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.voltiopedal.apiinventario.common.MotivoRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+
 import java.util.List;
 
 @RestController
@@ -74,9 +78,11 @@ public class ProveedorController {
      */
 
     /* DELETE /api/proveedores/{id} -> eliminación lógica */
+        /* DELETE /api/proveedores/{id} -> eliminación lógica (con motivo) */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> desactivar(@PathVariable Integer id) {
-        proveedorService.desactivar(id);
+    public ResponseEntity<Void> desactivar(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                           @AuthenticationPrincipal Jwt jwt) {
+        proveedorService.desactivar(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 
@@ -86,10 +92,11 @@ public class ProveedorController {
      * ==============================
      */
 
-    /* DELETE /api/proveedores/{id}/fisico -> eliminación física */
+        /* DELETE /api/proveedores/{id}/fisico -> eliminación física (con motivo) */
     @DeleteMapping("/{id}/fisico")
-    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id) {
-        proveedorService.eliminarFisico(id);
+    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                               @AuthenticationPrincipal Jwt jwt) {
+        proveedorService.eliminarFisico(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 
@@ -100,8 +107,9 @@ public class ProveedorController {
     }
 
     @PatchMapping("/{id}/reactivar")
-    public ResponseEntity<Void> reactivar(@PathVariable Integer id) {
-        proveedorService.reactivar(id);
+    public ResponseEntity<Void> reactivar(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                          @AuthenticationPrincipal Jwt jwt) {
+        proveedorService.reactivar(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 }

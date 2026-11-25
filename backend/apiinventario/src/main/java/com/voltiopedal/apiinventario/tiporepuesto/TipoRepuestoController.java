@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.voltiopedal.apiinventario.common.MotivoRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+
 import jakarta.validation.Valid;
 
 @RestController 
@@ -67,10 +71,11 @@ public class TipoRepuestoController {
      *       D - ELIMINAR FÍSICO
      * ============================== */
 
-    /* DELETE /api/tipos-repuesto/{id} -> eliminación física */
+    /* DELETE /api/tipos-repuesto/{id} -> eliminación física (con motivo) */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id) {
-        tipoRepuestoService.eliminarFisico(id);
+    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                               @AuthenticationPrincipal Jwt jwt) {
+        tipoRepuestoService.eliminarFisico(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 }

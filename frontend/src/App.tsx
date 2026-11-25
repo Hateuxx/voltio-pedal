@@ -14,6 +14,15 @@ import IngresoFormPage from './features/ingresos/IngresoFormPage'
 import KardexPage from './features/mercaderia/KardexPage'
 import ConteosPage from './features/conteos/ConteosPage'
 import ConteoDetallePage from './features/conteos/ConteoDetallePage'
+import ClientesPage from './features/clientes/ClientesPage'
+import ClienteFormPage from './features/clientes/ClienteFormPage'
+import VentasPage from './features/ventas/VentasPage'
+import VentaFormPage from './features/ventas/VentaFormPage'
+import ServiciosPage from './features/servicios/ServiciosPage'
+import ServicioFormPage from './features/servicios/ServicioFormPage'
+import ServicioDetallePage from './features/servicios/ServicioDetallePage'
+import ReportesPage from './features/reportes/ReportesPage'
+import AuditoriaPage from './features/auditoria/AuditoriaPage'
 
 function App() {
   return (
@@ -34,6 +43,16 @@ function App() {
         <Route path="/mercaderia/:id/kardex" element={<RutaProtegida roles={rolesDe('/mercaderia')}><KardexPage /></RutaProtegida>} />
         <Route path="/conteos" element={<RutaProtegida roles={rolesDe('/conteos')}><ConteosPage /></RutaProtegida>} />
         <Route path="/conteos/:id" element={<RutaProtegida roles={rolesDe('/conteos')}><ConteoDetallePage /></RutaProtegida>} />
+        <Route path="/clientes" element={<RutaProtegida roles={rolesDe('/clientes')}><ClientesPage /></RutaProtegida>} />
+        <Route path="/clientes/nuevo" element={<RutaProtegida roles={['ADMINISTRADOR', 'OPERADOR_TIENDA']}><ClienteFormPage /></RutaProtegida>} />
+        <Route path="/clientes/:id/editar" element={<RutaProtegida roles={['ADMINISTRADOR']}><ClienteFormPage /></RutaProtegida>} />
+        <Route path="/ventas" element={<RutaProtegida roles={rolesDe('/ventas')}><VentasPage /></RutaProtegida>} />
+        <Route path="/ventas/nueva" element={<RutaProtegida roles={rolesDe('/ventas')}><VentaFormPage /></RutaProtegida>} />
+        <Route path="/servicios" element={<RutaProtegida roles={rolesDe('/servicios')}><ServiciosPage /></RutaProtegida>} />
+        <Route path="/servicios/nuevo" element={<RutaProtegida roles={['ADMINISTRADOR', 'OPERADOR_TIENDA']}><ServicioFormPage /></RutaProtegida>} />
+        <Route path="/servicios/:id" element={<RutaProtegida roles={rolesDe('/servicios')}><ServicioDetallePage /></RutaProtegida>} />
+        <Route path="/reportes" element={<RutaProtegida roles={rolesDe('/reportes')}><ReportesPage /></RutaProtegida>} />
+        <Route path="/auditoria" element={<RutaProtegida roles={rolesDe('/auditoria')}><AuditoriaPage /></RutaProtegida>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/inicio" replace />} />

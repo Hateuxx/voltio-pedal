@@ -1,6 +1,7 @@
 package com.voltiopedal.apiinventario.usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
@@ -15,4 +16,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     /* Firma para contrar los activos */
     long countByRolAndActivoTrue(Rol rol);
+
+    /* Usuarios activos de un rol, ordenados por nombre (p. ej. técnicos para asignar servicios) */
+    List<Usuario> findByRolAndActivoTrueOrderByNombresAsc(Rol rol);
 }

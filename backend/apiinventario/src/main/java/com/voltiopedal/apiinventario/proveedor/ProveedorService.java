@@ -1,5 +1,7 @@
 package com.voltiopedal.apiinventario.proveedor;
 
+import com.voltiopedal.apiinventario.auditoria.AccionAuditoria;
+import com.voltiopedal.apiinventario.auditoria.AuditoriaService;
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 @Service
 public class ProveedorService {
     private final ProveedorRepository proveedorRepository;
+    private final AuditoriaService auditoriaService;
 
     /* Insertar dependencia recomendada por constructor */
-    public ProveedorService(ProveedorRepository proveedorRepository) {
+    public ProveedorService(ProveedorRepository proveedorRepository, AuditoriaService auditoriaService) {
         this.proveedorRepository = proveedorRepository;
+        this.auditoriaService = auditoriaService;
     }
 
     /*
@@ -28,9 +32,11 @@ public class ProveedorService {
      * (rollback)
      */
 
-    /* ==============================
-     *          C - CREAR
-     * ============================== */
+    /*
+     * ==============================
+     * C - CREAR
+     * ==============================
+     */
 
     @Transactional
     public ProveedorResponse registrar(ProveedorRequest request) {
@@ -69,9 +75,11 @@ public class ProveedorService {
         return aResponse(guardado);
     }
 
-    /* ==============================
-     *          R - CONSULTAR
-     * ============================== */
+    /*
+     * ==============================
+     * R - CONSULTAR
+     * ==============================
+     */
 
     /*
      * Listar uso un Stream para convertir la lista de Entidades a lista de
@@ -93,9 +101,11 @@ public class ProveedorService {
         return aResponse(obtenerPorId(id));
     }
 
-    /* ==============================
-     *          U - ACTUALIZAR
-     * ============================== */
+    /*
+     * ==============================
+     * U - ACTUALIZAR
+     * ==============================
+     */
 
     /* ACTUALIZAR (U): no toca ni el id ni el campo activo */
     @Transactional
@@ -116,59 +126,67 @@ public class ProveedorService {
         return aResponse(proveedorRepository.save(proveedor));
     }
 
-    /* ==============================
-     *       D - ELIMINAR LÓGICO
-     * ============================== */
+    /*
+     * ==============================
+     * D - ELIMINAR LÓGICO
+     * ==============================
+     */
 
     /* ELIMINACIÓN LÓGICA (D): la fila se queda, solo se marca como inactivo */
     @Transactional
-    public void desactivar(Integer id) {
+    public void desactivar(Integer id, String motivo, Integer idUsuario) {
         Proveedor proveedor = obtenerPorId(id);
-
-        /* Si ya estaba dado de baja, se informa con un 409 en lugar de repetir la operación */
         if (!proveedor.getActivo()) {
             throw new ReglaNegocioException("El proveedor ya está dado de baja.");
         }
-
         proveedor.setActivo(false);
-        proveedorRepository.save(proveedor);
+        auditoriaService.registrar(idUsuario, AccionAuditoria.INACTIVACION, "PROVEEDOR", proveedor.getRuc(), motivo);
     }
 
-    /* ==============================
-     *       D - ELIMINAR FÍSICO
-     * ============================== */
+    /*
+     * ==============================
+     * D - ELIMINAR FÍSICO
+     * ==============================
+     */
 
     /* ELIMINACIÓN FÍSICA (D): borra la fila de la base de datos */
     @Transactional
-    public void eliminarFisico(Integer id) {
+    public void eliminarFisico(Integer id, String motivo, Integer idUsuario) {
         Proveedor proveedor = obtenerPorId(id);
+        String ruc = proveedor.getRuc(); /* se guarda ANTES de borrar */
         try {
             proveedorRepository.delete(proveedor);
             proveedorRepository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new ReglaNegocioException("No se puede eliminar el proveedor porque tiene mercadería o ingresos asociados. Use 'Dar de baja'.");
+            throw new ReglaNegocioException(
+                    "No se puede eliminar el proveedor porque tiene mercadería o ingresos asociados. Use 'Dar de baja'.");
         }
+        auditoriaService.registrar(idUsuario, AccionAuditoria.ELIMINACION_FISICA, "PROVEEDOR", ruc, motivo);
     }
 
     @Transactional(readOnly = true)
     public List<ProveedorResponse> listarInactivos() {
-        return proveedorRepository.findByActivoFalse().stream().map(this::aResponse)/* 0 proveedor -> aResponse(proveedor) */.toList();
+        return proveedorRepository.findByActivoFalse().stream().map(this::aResponse)/*
+                                                                                     * 0 proveedor ->
+                                                                                     * aResponse(proveedor)
+                                                                                     */.toList();
     }
 
-    @Transactional 
-    public void reactivar(Integer id) {
+    @Transactional
+    public void reactivar(Integer id, String motivo, Integer idUsuario) {
         Proveedor proveedor = obtenerPorId(id);
-
         if (proveedor.getActivo()) {
             throw new ReglaNegocioException("El proveedor ya está activo.");
         }
-
         proveedor.setActivo(true);
+        auditoriaService.registrar(idUsuario, AccionAuditoria.REACTIVACION, "PROVEEDOR", proveedor.getRuc(), motivo);
     }
 
-    /* ==============================
-     *       MÉTODOS AUXILIARES
-     * ============================== */
+    /*
+     * ==============================
+     * MÉTODOS AUXILIARES
+     * ==============================
+     */
 
     /* MÉTODO PRIVADO: busca por id o lanza el 404 */
     private Proveedor obtenerPorId(Integer id) {

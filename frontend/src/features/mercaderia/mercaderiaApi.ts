@@ -72,16 +72,16 @@ export function actualizarMercaderia(id: number, datos: MercaderiaRequest) {
     return api<Mercaderia>(`${BASE}/${id}`, { method: 'PUT', body: JSON.stringify(datos) })
 }
 
-export function darDeBajaMercaderia(id: number) {
-    return api<void>(`${BASE}/${id}`, { method: 'DELETE' })
+export function darDeBajaMercaderia(id: number, motivo: string) {
+    return api<void>(`${BASE}/${id}`, { method: 'DELETE', body: JSON.stringify({ motivo }) })
 }
 
-export function reactivarMercaderia(id: number) {
-    return api<void>(`${BASE}/${id}/reactivar`, { method: 'PATCH' })
+export function reactivarMercaderia(id: number, motivo: string) {
+    return api<void>(`${BASE}/${id}/reactivar`, { method: 'PATCH', body: JSON.stringify({ motivo }) })
 }
 
-export function eliminarMercaderia(id: number) {
-    return api<void>(`${BASE}/${id}/fisico`, { method: 'DELETE' })
+export function eliminarMercaderia(id: number, motivo: string) {
+    return api<void>(`${BASE}/${id}/fisico`, { method: 'DELETE', body: JSON.stringify({ motivo }) })
 }
 
 export type TipoMovimiento =

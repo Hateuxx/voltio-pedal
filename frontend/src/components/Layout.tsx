@@ -14,10 +14,10 @@ function Layout() {
 
     return (
         <>
-            <nav className="navbar navbar-expand bg-primary navbar-dark mb-4">
+            <nav className="navbar navbar-expand bg-primary navbar-dark mb-4 d-print-none">
                 <div className="container">
                     <NavLink to="/inicio" className="navbar-brand">Voltio & Pedal</NavLink>
-                    <ul className="navbar-nav me-auto">
+                    <ul className="navbar-nav me-auto flex-wrap">
                         {opciones.map(o => (
                             <li className="nav-item" key={o.ruta}>
                                 <NavLink to={o.ruta} className="nav-link">{o.texto}</NavLink>

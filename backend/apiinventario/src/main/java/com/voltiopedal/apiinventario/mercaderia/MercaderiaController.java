@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.voltiopedal.apiinventario.common.MotivoRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+
 import java.util.List;
 
 @RestController
@@ -41,21 +45,26 @@ public class MercaderiaController {
         return mercaderiaService.actualizar(id, request);
     }
 
+    /* DELETE /api/proveedores/{id} -> eliminación lógica (con motivo) */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> desactivar(@PathVariable Integer id) {
-        mercaderiaService.desactivar(id);
+    public ResponseEntity<Void> desactivar(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                           @AuthenticationPrincipal Jwt jwt) {
+        mercaderiaService.desactivar(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/reactivar")
-    public ResponseEntity<Void> reactivar(@PathVariable Integer id) {
-        mercaderiaService.reactivar(id);
+    public ResponseEntity<Void> reactivar(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                          @AuthenticationPrincipal Jwt jwt) {
+        mercaderiaService.reactivar(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 
+        /* DELETE /api/proveedores/{id}/fisico -> eliminación física (con motivo) */
     @DeleteMapping("/{id}/fisico")
-    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id) {
-        mercaderiaService.eliminarFisico(id);
+    public ResponseEntity<Void> eliminarFisico(@PathVariable Integer id, @Valid @RequestBody MotivoRequest request,
+                                               @AuthenticationPrincipal Jwt jwt) {
+        mercaderiaService.eliminarFisico(id, request.motivo(), Integer.valueOf(jwt.getSubject()));
         return ResponseEntity.noContent().build();
     }
 

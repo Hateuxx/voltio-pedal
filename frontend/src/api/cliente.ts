@@ -56,5 +56,5 @@ export async function api<T>(ruta: string, opciones: RequestInit = {}): Promise<
 
 /* Mensaje legible para cualquier error de api() */
 export function mensajeDeError(err: unknown) {
-    return err instanceof ErrorApi ? err.problema.detail : 'No se pude conectar con el servidor.'
+    return err instanceof ErrorApi ? err.problema.detail : 'No se pudo conectar con el servidor.'
 }

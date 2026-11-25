@@ -5,6 +5,7 @@ import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 import com.voltiopedal.apiinventario.mercaderia.Mercaderia;
 import com.voltiopedal.apiinventario.mercaderia.MercaderiaRepository;
 import com.voltiopedal.apiinventario.usuario.UsuarioRepository;
+import com.voltiopedal.apiinventario.venta.VentaRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,13 +23,16 @@ public class KardexService {
     private final MovimientoInventarioRepository movimientoRepository;
     private final MercaderiaRepository mercaderiaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final VentaRepository ventaRepository;
 
     public KardexService(MovimientoInventarioRepository movimientoRepository,
             MercaderiaRepository mercaderiaRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            VentaRepository ventaRepository) {
         this.movimientoRepository = movimientoRepository;
         this.mercaderiaRepository = mercaderiaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.ventaRepository = ventaRepository;
     }
 
     /*
@@ -54,6 +58,43 @@ public class KardexService {
         return aplicar(mov);
     }
 
+    /* Salida por venta (RF11) */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public MovimientoInventario registrarSalidaPorVenta(Mercaderia mercaderia, int cantidad,
+                                                       Integer idUsuario, Integer idVenta) {
+        MovimientoInventario mov = nuevo(mercaderia, TipoMovimiento.SALIDA_VENTA, cantidad, idUsuario);
+        mov.setIdVenta(idVenta);
+        return aplicar(mov);
+    }
+
+    /* Devolución al anular una venta: el stock vuelve a entrar */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public MovimientoInventario registrarDevolucionPorVenta(Mercaderia mercaderia, int cantidad,
+                                                           Integer idUsuario, Integer idVenta, String observacion) {
+        MovimientoInventario mov = nuevo(mercaderia, TipoMovimiento.DEVOLUCION_VENTA, cantidad, idUsuario);
+        mov.setIdVenta(idVenta);
+        mov.setObservacion(observacion);
+        return aplicar(mov);
+    }
+
+    /* Salida de repuestos consumidos en un servicio técnico (RF17) */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public MovimientoInventario registrarSalidaPorReparacion(Mercaderia mercaderia, int cantidad,
+                                                            Integer idUsuario, Integer idServicio) {
+        MovimientoInventario mov = nuevo(mercaderia, TipoMovimiento.SALIDA_REPARACION, cantidad, idUsuario);
+        mov.setIdServicioTecnico(idServicio);
+        return aplicar(mov);
+    }
+
+    /* Devolución de un repuesto no usado en un servicio técnico */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public MovimientoInventario registrarDevolucionPorReparacion(Mercaderia mercaderia, int cantidad,
+                                                                Integer idUsuario, Integer idServicio) {
+        MovimientoInventario mov = nuevo(mercaderia, TipoMovimiento.DEVOLUCION_REPARACION, cantidad, idUsuario);
+        mov.setIdServicioTecnico(idServicio);
+        return aplicar(mov);
+    }
+
     /*
      * ==============================
      * CONSULTA DEL KARDEX
@@ -74,6 +115,11 @@ public class KardexService {
         Map<Integer, String> nombres = usuarioRepository.findAllById(idsUsuario).stream()
                 .collect(Collectors.toMap(u -> u.getIdUsuario(), u -> u.getNombres() + " " + u.getApellidos()));
 
+        /* Igual para las ventas: el kardex muestra el N.º de comprobante (B001-...), no el id interno */
+        Set<Integer> idsVenta = movimientos.stream().map(mov -> mov.getIdVenta()).filter(id -> id != null).collect(Collectors.toSet());
+        Map<Integer, String> comprobantes = ventaRepository.findAllById(idsVenta).stream()
+                .collect(Collectors.toMap(v -> v.getIdVenta(), v -> v.getNumeroComprobante()));
+
         return movimientos.stream()
                 .map(mov -> new MovimientoResponse(
                         mov.getIdMovimiento(),
@@ -84,16 +130,16 @@ public class KardexService {
                         mov.getStockAnterior(),
                         mov.getStockResultante(),
                         nombres.getOrDefault(mov.getIdUsuario(), "Usuario #" + mov.getIdUsuario()),
-                        origenDe(mov),
+                        origenDe(mov, comprobantes),
                         mov.getObservacion()))
                 .toList();
     }
 
-    private String origenDe(MovimientoInventario mov) {
+    private String origenDe(MovimientoInventario mov, Map<Integer, String> comprobantes) {
         if (mov.getIdIngreso() != null)
             return "Ingreso #" + mov.getIdIngreso();
         if (mov.getIdVenta() != null)
-            return "Venta #" + mov.getIdVenta();
+            return "Venta " + comprobantes.getOrDefault(mov.getIdVenta(), "#" + mov.getIdVenta());
         if (mov.getIdServicioTecnico() != null)
             return "Servicio técnico #" + mov.getIdServicioTecnico();
         if (mov.getIdConteo() != null)

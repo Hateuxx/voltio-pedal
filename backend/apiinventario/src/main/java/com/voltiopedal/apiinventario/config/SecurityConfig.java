@@ -91,6 +91,19 @@ public class SecurityConfig {
                 .requestMatchers("/api/conteos", "/api/conteos/**").hasAnyRole(ADMIN, OPERADOR)
 
                 /* Cualquier otra ruta: basta con haber iniciado sesión */
+                /* Auditoría: solo el administrador */
+                .requestMatchers("/api/auditoria", "/api/auditoria/**").hasRole(ADMIN)
+
+                /* Ventas: registrar y consultar (admin y operador); anular solo admin */
+                .requestMatchers(HttpMethod.POST, "/api/ventas/*/anular").hasRole(ADMIN)
+                .requestMatchers("/api/ventas", "/api/ventas/**").hasAnyRole(ADMIN, OPERADOR)
+
+                /* Servicio técnico: los 3 roles (el operador recibe, el técnico repara) */
+                .requestMatchers("/api/servicios", "/api/servicios/**").hasAnyRole(ADMIN, OPERADOR, TECNICO)
+
+                /* Reportes gerenciales: solo el administrador */
+                .requestMatchers("/api/reportes", "/api/reportes/**").hasRole(ADMIN)
+
                 .anyRequest().authenticated())
             /* Activa la validación del token JWT y la lectura del rol */
             .oauth2ResourceServer(oauth -> oauth
