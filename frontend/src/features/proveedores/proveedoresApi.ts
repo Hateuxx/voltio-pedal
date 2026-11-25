@@ -35,3 +35,14 @@ export function crearProveedor(datos: ProveedorRequest) {
         body: JSON.stringify(datos),
     })
 }
+
+export function obtenerProveedor(id: number) {
+    return api<Proveedor>(`/api/proveedores/${id}`)
+}
+
+export function actualizarProveedor(id: number, datos: ProveedorRequest) {
+    return api<Proveedor>(`/api/proveedores/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(datos),
+    })
+}

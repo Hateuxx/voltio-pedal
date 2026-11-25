@@ -1,7 +1,7 @@
-import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ErrorApi } from "../../api/cliente";
-import { crearProveedor, type ProveedorRequest } from "./proveedoresApi";
+import { actualizarProveedor, crearProveedor, obtenerProveedor, type ProveedorRequest } from "./proveedoresApi";
 
 /* En el formulario TODO es string: un <input> no acepta null */
 const VACIO = {
@@ -14,21 +14,41 @@ const VACIO = {
 }
 
 export default function ProveedorFormPage() {
+    const { id } = useParams()
+    const esEdicion = id !== undefined
     const navigate = useNavigate()
     const [datos, setDatos] = useState(VACIO)
     const [errores, setErrores] = useState<Record<string, string>>({})
-    const [error, setError] = useState<string | null>(null)
     const [guardando, setGuardando] = useState(false)
+    const [cargando, setCargando] = useState(esEdicion)
+    const [errorCarga, setErrorCarga] = useState<string | null>(null)
+    const [errorGuardar, setErrorGuardar] = useState<string | null>(null)
 
     function cambiar(campo: keyof typeof VACIO, valor: string) {
         setDatos(prev => ({ ...prev, [campo]: valor }))
     }
 
+    useEffect(() => {
+        if (!esEdicion) return
+        obtenerProveedor(Number(id))
+            .then(p => setDatos({
+                ruc: p.ruc,
+                razonSocial: p.razonSocial,
+                contacto: p.contacto ?? '',
+                telefono: p.telefono ?? '',
+                rubro: p.rubro ?? '',
+                frecuenciaEntrega: p.frecuenciaEntrega ?? 'SEMANAL',
+            }))
+            .catch(err => setErrorCarga(err instanceof ErrorApi ? err.problema.detail : 'No se pudo conectar con el servidor.'))
+            .finally(() => setCargando(false))
+    }, [esEdicion, id])
+
     async function guardar(e: FormEvent) {
         e.preventDefault()
-        setError(null)
+        setErrorGuardar(null)
         setErrores({})
         setGuardando(true)
+
         try {
             const enviar: ProveedorRequest = {
                 ruc: datos.ruc.trim(),
@@ -38,24 +58,42 @@ export default function ProveedorFormPage() {
                 rubro: datos.rubro.trim() || null,
                 frecuenciaEntrega: datos.frecuenciaEntrega as ProveedorRequest['frecuenciaEntrega'],
             }
-            await crearProveedor(enviar)
+            if (esEdicion) {
+                await actualizarProveedor(Number(id), enviar)
+            } else {
+                await crearProveedor(enviar)
+            }
             navigate('/proveedores')
         } catch (err) {
             if (err instanceof ErrorApi) {
                 setErrores(err.problema.errores ?? {})
-                setError(err.problema.detail)
+                setErrorGuardar(err.problema.detail)
             } else {
-                setError('No se pudo conectar con el servidor.')
+                setErrorGuardar('No se pudo conectar con el servidor.')
             }
         } finally {
             setGuardando(false)
         }
     }
 
+    /* Salida temprana si falló la carga */
+    if (cargando) return <p className='text-muted my-4'>Cargando proveedor...</p>
+
+    if (errorCarga) {
+        return (
+            <div className="my-4">
+                <div className="alert alert-danger">{errorCarga}</div>
+                <Link to="/proveedores" className="btn btn-outline-secondary">
+                    Volver
+                </Link>
+            </div>
+        )
+    }
+
     return (
         <>
-            <h2 className="text-primary my-4">Nuevo proveedor</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
+            <h2 className="text-primary my-4">{esEdicion ? 'Editar proveedor' : 'Nuevo proveedor'}</h2>
+            {errorGuardar && <div className="alert alert-danger">{errorGuardar}</div>}
 
             <form onSubmit={guardar} noValidate>
                 <div className="mb-3">
