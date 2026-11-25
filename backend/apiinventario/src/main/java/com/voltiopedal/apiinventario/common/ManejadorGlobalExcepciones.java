@@ -87,6 +87,18 @@ public class ManejadorGlobalExcepciones {
         return problema;
     }
 
+    /* Validaciones del servicio con errores por campo -> 400 BAD REQUEST (mismo formato que @Valid) */
+    @ExceptionHandler(ValidacionException.class)
+    public ProblemDetail manejarValidacionServicio(ValidacionException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            "Por favor, corrija los errores en el formulario para continuar."
+        );
+        problema.setTitle("Datos de entrada inválidos");
+        problema.setProperty("errores", ex.getErrores());
+        return problema;
+    }
+
     /* Manejo de JSON mal formado o ilegible -> 400 BAD REQUEST */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail manejarJsonIlegible(HttpMessageNotReadableException ex) {

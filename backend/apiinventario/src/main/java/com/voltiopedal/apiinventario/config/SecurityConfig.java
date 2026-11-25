@@ -62,6 +62,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/clientes").hasAnyRole(ADMIN, OPERADOR)
                 .requestMatchers("/api/clientes", "/api/clientes/**").hasRole(ADMIN)
 
+                /* Mercadería: inactivos solo admin (ANTES del GET general), consultar todos, lo demás solo admin */
+                .requestMatchers(HttpMethod.GET, "/api/mercaderias/inactivos").hasRole(ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/mercaderias", "/api/mercaderias/**").hasAnyRole(ADMIN, OPERADOR, TECNICO)
+                .requestMatchers("/api/mercaderias", "/api/mercaderias/**").hasRole(ADMIN)
+
                 /* Inactivos: solo el administrador (debe ir ANTES de la regla GET general) */
                 .requestMatchers(HttpMethod.GET, "/api/proveedores/inactivos").hasRole(ADMIN)
 

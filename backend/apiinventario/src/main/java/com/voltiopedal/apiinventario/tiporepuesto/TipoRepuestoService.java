@@ -86,7 +86,7 @@ public class TipoRepuestoService {
             tipoRepuestoRepository.delete(tipo);
             tipoRepuestoRepository.flush();
         } catch (DataIntegrityViolationException e) {
-            throw new ReglaNegocioException("No se puede eliminar el tipo de respuesto que lo usan.");
+            throw new ReglaNegocioException("No se puede eliminar el tipo de repuesto porque hay repuestos que lo usan.");
         }
     }
 

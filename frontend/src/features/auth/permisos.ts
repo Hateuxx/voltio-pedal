@@ -10,6 +10,7 @@ export interface OpcionMenu {
 export const MENU: OpcionMenu[] = [
     { ruta: '/proveedores', texto: 'Proveedores', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA']},
     { ruta: '/tipos-repuesto', texto: 'Tipos de repuesto', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
+    { ruta: '/mercaderia', texto: 'Mercadería', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
 ]
 
 export function rolesDe(ruta: string): RolUsuario[] {
