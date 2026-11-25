@@ -86,6 +86,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/ingresos", "/api/ingresos/**").hasAnyRole(ADMIN, OPERADOR)
                 .requestMatchers("/api/ingresos", "/api/ingresos/**").hasRole(ADMIN)
 
+                /* Conteos: cerrar (aplica ajustes al stock) solo admin; contar admin y operador */
+                .requestMatchers(HttpMethod.POST, "/api/conteos/*/cerrar").hasRole(ADMIN)
+                .requestMatchers("/api/conteos", "/api/conteos/**").hasAnyRole(ADMIN, OPERADOR)
+
                 /* Cualquier otra ruta: basta con haber iniciado sesión */
                 .anyRequest().authenticated())
             /* Activa la validación del token JWT y la lectura del rol */
