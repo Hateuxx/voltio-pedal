@@ -1,154 +1,184 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import {
-    darDeBajaProveedor, eliminarProveedor, listarProveedores,
-    listarProveedoresInactivos, reactivarProveedor, type Proveedor,
-} from './proveedoresApi'
-import { ErrorApi } from '../../api/cliente'
-import { obtenerUsuario } from '../auth/sesion'
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ErrorApi } from "../../api/cliente";
+import { actualizarProveedor, crearProveedor, obtenerProveedor, type ProveedorRequest } from "./proveedoresApi";
 
-function mensajeDe(err: unknown) {
-    return err instanceof ErrorApi ? err.problema.detail : 'No se pudo conectar con el servidor.'
+/* En el formulario TODO es string: un <input> no acepta null */
+const VACIO = {
+    ruc: '',
+    razonSocial: '',
+    contacto: '',
+    telefono: '',
+    rubro: '',
+    frecuenciaEntrega: 'SEMANAL',
 }
 
-function ProveedoresPage() {
-    const [proveedores, setProveedores] = useState<Proveedor[]>([])
-    const [cargando, setCargando] = useState(true)
-    const [error, setError] = useState<string | null>(null)          // error al CARGAR la lista
-    const [errorAccion, setErrorAccion] = useState<string | null>(null) // error de baja/reactivar/eliminar
-    const [verInactivos, setVerInactivos] = useState(false)
-    const [recargar, setRecargar] = useState(0)                      // cambiarlo vuelve a pedir la lista
-    const esAdmin = obtenerUsuario()?.rol === 'ADMINISTRADOR'
+export default function ProveedorFormPage() {
+    const { id } = useParams()
+    const esEdicion = id !== undefined
+    const navigate = useNavigate()
+    const [datos, setDatos] = useState(VACIO)
+    const [errores, setErrores] = useState<Record<string, string>>({})
+    const [guardando, setGuardando] = useState(false)
+    const [cargando, setCargando] = useState(esEdicion)
+    const [errorCarga, setErrorCarga] = useState<string | null>(null)
+    const [errorGuardar, setErrorGuardar] = useState<string | null>(null)
 
-    useEffect(() => {
-        let vigente = true
-        const pedir = verInactivos ? listarProveedoresInactivos : listarProveedores
-        pedir()
-            .then(lista => {
-                if (!vigente) return
-                setProveedores(lista)
-                setError(null)
-            })
-            .catch(err => { if (vigente) setError(mensajeDe(err)) })
-            .finally(() => { if (vigente) setCargando(false) })
-        return () => { vigente = false }
-    }, [verInactivos, recargar])
-
-    function cambiarVista() {
-        setCargando(true)
-        setErrorAccion(null)
-        setVerInactivos(v => !v)
+    function cambiar(campo: keyof typeof VACIO, valor: string) {
+        setDatos(prev => ({ ...prev, [campo]: valor }))
     }
 
-    /* Ejecuta una acción y, si sale bien, recarga la lista desde el backend (opción a) */
-    async function ejecutar(accion: () => Promise<void>) {
-        setErrorAccion(null)
+    useEffect(() => {
+        if (!esEdicion) return
+        obtenerProveedor(Number(id))
+            .then(p => setDatos({
+                ruc: p.ruc,
+                razonSocial: p.razonSocial,
+                contacto: p.contacto ?? '',
+                telefono: p.telefono ?? '',
+                rubro: p.rubro ?? '',
+                frecuenciaEntrega: p.frecuenciaEntrega ?? 'SEMANAL',
+            }))
+            .catch(err => setErrorCarga(err instanceof ErrorApi ? err.problema.detail : 'No se pudo conectar con el servidor.'))
+            .finally(() => setCargando(false))
+    }, [esEdicion, id])
+
+    async function guardar(e: FormEvent) {
+        e.preventDefault()
+        setErrorGuardar(null)
+        setErrores({})
+        setGuardando(true)
+
         try {
-            await accion()
-            setRecargar(n => n + 1)
+            const enviar: ProveedorRequest = {
+                ruc: datos.ruc.trim(),
+                razonSocial: datos.razonSocial.trim(),
+                contacto: datos.contacto.trim() || null,
+                telefono: datos.telefono.trim() || null,
+                rubro: datos.rubro.trim() || null,
+                frecuenciaEntrega: datos.frecuenciaEntrega as ProveedorRequest['frecuenciaEntrega'],
+            }
+            if (esEdicion) {
+                await actualizarProveedor(Number(id), enviar)
+            } else {
+                await crearProveedor(enviar)
+            }
+            navigate('/proveedores')
         } catch (err) {
-            setErrorAccion(mensajeDe(err))
+            if (err instanceof ErrorApi) {
+                setErrores(err.problema.errores ?? {})
+                setErrorGuardar(err.problema.detail)
+            } else {
+                setErrorGuardar('No se pudo conectar con el servidor.')
+            }
+        } finally {
+            setGuardando(false)
         }
     }
 
-    function darDeBaja(p: Proveedor) {
-        if (!window.confirm(`¿Dar de baja a "${p.razonSocial}"? Podrás reactivarlo después.`)) return
-        ejecutar(() => darDeBajaProveedor(p.idProveedor))
-    }
+    /* Salida temprana si falló la carga */
+    if (cargando) return <p className='text-muted my-4'>Cargando proveedor...</p>
 
-    function reactivar(p: Proveedor) {
-        if (!window.confirm(`¿Reactivar a "${p.razonSocial}"?`)) return
-        ejecutar(() => reactivarProveedor(p.idProveedor))
-    }
-
-    function eliminar(p: Proveedor) {
-        if (!window.confirm(`¿Eliminar DEFINITIVAMENTE a "${p.razonSocial}"? Esta acción NO se puede deshacer.`)) return
-        ejecutar(() => eliminarProveedor(p.idProveedor))
+    if (errorCarga) {
+        return (
+            <div className="my-4">
+                <div className="alert alert-danger">{errorCarga}</div>
+                <Link to="/proveedores" className="btn btn-outline-secondary">
+                    Volver
+                </Link>
+            </div>
+        )
     }
 
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1 className="h3 text-primary mb-0">
-                    {verInactivos ? 'Proveedores inactivos' : 'Proveedores'}
-                </h1>
-                {esAdmin && (
-                    <div>
-                        <button className="btn btn-outline-secondary" onClick={cambiarVista}>
-                            {verInactivos ? 'Ver activos' : 'Ver inactivos'}
-                        </button>
-                        {!verInactivos && (
-                            <Link to="/proveedores/nuevo" className="btn btn-success ms-2">
-                                Nuevo proveedor
-                            </Link>
-                        )}
-                    </div>
-                )}
-            </div>
+            <h2 className="text-primary my-4">{esEdicion ? 'Editar proveedor' : 'Nuevo proveedor'}</h2>
+            {errorGuardar && <div className="alert alert-danger">{errorGuardar}</div>}
 
-            {cargando && <p className="text-muted">Cargando proveedores...</p>}
-            {error && <div className="alert alert-danger">{error}</div>}
-            {errorAccion && <div className="alert alert-danger">{errorAccion}</div>}
+            <form onSubmit={guardar} noValidate>
+                <div className="mb-3">
+                    <label htmlFor="ruc" className="form-label">RUC *</label>
+                    <input
+                        id="ruc"
+                        className={`form-control ${errores.ruc ? 'is-invalid' : ''}`}
+                        value={datos.ruc}
+                        onChange={e => cambiar('ruc', e.target.value)}
+                        maxLength={11}
+                    />
+                    {errores.ruc && <div className="invalid-feedback">{errores.ruc}</div>}
+                </div>
 
-            {!cargando && !error && (
-                <table className="table table-striped table-hover align-middle">
-                    <thead className="table-light">
-                        <tr>
-                            <th>RUC</th>
-                            <th>Razón social</th>
-                            <th>Contacto</th>
-                            <th>Teléfono</th>
-                            <th>Rubro</th>
-                            <th>Frecuencia</th>
-                            {esAdmin && <th>Acciones</th>}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proveedores.length === 0 && (
-                            <tr>
-                                <td colSpan={esAdmin ? 7 : 6} className="text-center text-muted">
-                                    {verInactivos ? 'No hay proveedores inactivos.' : 'No hay proveedores registrados.'}
-                                </td>
-                            </tr>
-                        )}
-                        {proveedores.map(p => (
-                            <tr key={p.idProveedor}>
-                                <td>{p.ruc}</td>
-                                <td>{p.razonSocial}</td>
-                                <td>{p.contacto ?? '—'}</td>
-                                <td>{p.telefono ?? '—'}</td>
-                                <td>{p.rubro ?? '—'}</td>
-                                <td>{p.frecuenciaEntrega}</td>
-                                {esAdmin && (
-                                    <td className="text-nowrap">
-                                        {verInactivos ? (
-                                            <>
-                                                <button className="btn btn-sm btn-outline-success" onClick={() => reactivar(p)}>
-                                                    Reactivar
-                                                </button>
-                                                <button className="btn btn-sm btn-danger ms-2" onClick={() => eliminar(p)}>
-                                                    Eliminar
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Link to={`/proveedores/${p.idProveedor}/editar`} className="btn btn-sm btn-outline-primary">
-                                                    Editar
-                                                </Link>
-                                                <button className="btn btn-sm btn-outline-danger ms-2" onClick={() => darDeBaja(p)}>
-                                                    Dar de baja
-                                                </button>
-                                            </>
-                                        )}
-                                    </td>
-                                )}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+                <div className="mb-3">
+                    <label htmlFor="razonSocial" className="form-label">Razón social *</label>
+                    <input
+                        id="razonSocial"
+                        className={`form-control ${errores.razonSocial ? 'is-invalid' : ''}`}
+                        value={datos.razonSocial}
+                        onChange={e => cambiar('razonSocial', e.target.value)}
+                        maxLength={255}
+                    />
+                    {errores.razonSocial && <div className="invalid-feedback">{errores.razonSocial}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="contacto" className="form-label">Contacto</label>
+                    <input
+                        id="contacto"
+                        className={`form-control ${errores.contacto ? 'is-invalid' : ''}`}
+                        value={datos.contacto}
+                        onChange={e => cambiar('contacto', e.target.value)}
+                        maxLength={100}
+                    />
+                    {errores.contacto && <div className="invalid-feedback">{errores.contacto}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="telefono" className="form-label">Teléfono</label>
+                    <input
+                        id="telefono"
+                        className={`form-control ${errores.telefono ? 'is-invalid' : ''}`}
+                        value={datos.telefono}
+                        onChange={e => cambiar('telefono', e.target.value)}
+                        maxLength={20}
+                    />
+                    {errores.telefono && <div className="invalid-feedback">{errores.telefono}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="rubro" className="form-label">Rubro</label>
+                    <input
+                        id="rubro"
+                        className={`form-control ${errores.rubro ? 'is-invalid' : ''}`}
+                        value={datos.rubro}
+                        onChange={e => cambiar('rubro', e.target.value)}
+                        maxLength={100}
+                    />
+                    {errores.rubro && <div className="invalid-feedback">{errores.rubro}</div>}
+                </div>
+
+                <div className="mb-4">
+                    <label htmlFor="frecuenciaEntrega" className="form-label">Frecuencia de entrega</label>
+                    <select
+                        id="frecuenciaEntrega"
+                        className={`form-select ${errores.frecuenciaEntrega ? 'is-invalid' : ''}`}
+                        value={datos.frecuenciaEntrega}
+                        onChange={e => cambiar('frecuenciaEntrega', e.target.value)}
+                    >
+                        <option value="SEMANAL">Semanal</option>
+                        <option value="QUINCENAL">Quincenal</option>
+                    </select>
+                    {errores.frecuenciaEntrega && (
+                        <div className="invalid-feedback">{errores.frecuenciaEntrega}</div>
+                    )}
+                </div>
+
+                <button type="submit" className="btn btn-primary" disabled={guardando}>
+                    {guardando ? 'Guardando...' : 'Guardar'}
+                </button>
+                <Link to="/proveedores" className="btn btn-outline-secondary ms-2">
+                    Cancelar
+                </Link>
+            </form>
         </>
     )
 }
-
-export default ProveedoresPage
