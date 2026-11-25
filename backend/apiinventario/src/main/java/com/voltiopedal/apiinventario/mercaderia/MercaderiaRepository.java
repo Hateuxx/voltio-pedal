@@ -24,8 +24,14 @@ public interface MercaderiaRepository extends JpaRepository<Mercaderia, Integer>
 
     boolean existsBySkuAndIdMercaderiaNot(String sku, Integer idMercaderia);
 
-        /* SELECT ... FOR UPDATE: bloquea la fila hasta que termine la transacción (evita que dos ingresos pisen el stock) */
+    /* SELECT ... FOR UPDATE: bloquea la fila hasta que termine la transacción (evita que dos ingresos pisen el stock) */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT m FROM Mercaderia m WHERE m.idMercaderia = :id")
     Optional<Mercaderia> buscarParaActualizarStock(@Param("id") Integer id);
+
+    /* Activos en o por debajo de su mínimo; los agotados primero */
+    @Query("SELECT m FROM Mercaderia m JOIN FETCH m.proveedor " +
+           "WHERE m.activo = true AND m.stock <= m.stockMinimo " +
+           "ORDER BY m.stock ASC, m.descripcion ASC")
+    List<Mercaderia> listarConStockBajo();
 }

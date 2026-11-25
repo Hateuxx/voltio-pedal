@@ -68,6 +68,11 @@ public class MercaderiaService {
         return aResponse(obtenerPorId(id));
     }
 
+    @Transactional(readOnly = true)
+    public List<MercaderiaResponse> listarStockBajo() {
+        return mercaderiaRepository.listarConStockBajo().stream().map(this::aResponse).toList();
+    }
+
     /* ==============================
      *          U - ACTUALIZAR
      * ============================== */
