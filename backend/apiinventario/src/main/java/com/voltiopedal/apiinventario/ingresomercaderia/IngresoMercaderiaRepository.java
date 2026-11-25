@@ -22,4 +22,7 @@ public interface IngresoMercaderiaRepository extends JpaRepository<IngresoMercad
     @Query("SELECT i FROM IngresoMercaderia i JOIN FETCH i.proveedor " +
            "WHERE i.idIngreso = :id")
     Optional<IngresoMercaderia> buscarPorIdConProveedor(@Param("id") Integer id);
+
+    /* La guía es única POR proveedor (constraint uq_ingreso_guia) */
+    boolean existsByProveedor_IdProveedorAndNumeroGuia(Integer idProveedor, String numeroGuia);
 }

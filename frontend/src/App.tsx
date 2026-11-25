@@ -9,6 +9,8 @@ import ProveedorFormPage from './features/proveedores/ProveedorFormPage'
 import TiposRepuestoPage from './features/tiposRepuesto/TiposRepuestoPage'
 import MercaderiaPage from './features/mercaderia/MercaderiaPage'
 import MercaderiaFormPage from './features/mercaderia/MercaderiaFormPage'
+import IngresosPage from './features/ingresos/IngresosPage'
+import IngresoFormPage from './features/ingresos/IngresoFormPage'
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/mercaderia" element={<RutaProtegida roles={rolesDe('/mercaderia')}><MercaderiaPage /></RutaProtegida>} />
         <Route path="/mercaderia/nueva" element={<RutaProtegida roles={['ADMINISTRADOR']}><MercaderiaFormPage /></RutaProtegida>} />
         <Route path="/mercaderia/:id/editar" element={<RutaProtegida roles={['ADMINISTRADOR']}><MercaderiaFormPage /></RutaProtegida>} />
+        <Route path="/ingresos" element={<RutaProtegida roles={rolesDe('/ingresos')}><IngresosPage /></RutaProtegida>} />
+        <Route path="/ingresos/nuevo" element={<RutaProtegida roles={rolesDe('/ingresos')}><IngresoFormPage /></RutaProtegida>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/inicio" replace />} />

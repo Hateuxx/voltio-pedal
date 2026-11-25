@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ingreso_mercaderia")
@@ -43,4 +45,14 @@ public class IngresoMercaderia {
     /* TINYINT(1) NOT NULL DEFAULT 1 -> Boolean */
     @Column(name = "activo", nullable = false)
     private Boolean activo = true;
+
+    /* Cabecera -> detalles. cascade ALL: al guardar el ingreso se guardan sus líneas */
+    @OneToMany(mappedBy = "ingreso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleIngreso> detalles = new ArrayList<>();
+
+    /* Mantiene los DOS lados de la relación sincronizados */
+    public void agregarDetalle(DetalleIngreso detalle) {
+        detalle.setIngreso(this);
+        detalles.add(detalle);
+    }
 }

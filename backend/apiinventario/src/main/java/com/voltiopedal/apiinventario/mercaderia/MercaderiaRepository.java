@@ -2,6 +2,12 @@ package com.voltiopedal.apiinventario.mercaderia;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import jakarta.persistence.LockModeType;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -17,4 +23,9 @@ public interface MercaderiaRepository extends JpaRepository<Mercaderia, Integer>
     boolean existsBySku(String sku);
 
     boolean existsBySkuAndIdMercaderiaNot(String sku, Integer idMercaderia);
+
+        /* SELECT ... FOR UPDATE: bloquea la fila hasta que termine la transacción (evita que dos ingresos pisen el stock) */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT m FROM Mercaderia m WHERE m.idMercaderia = :id")
+    Optional<Mercaderia> buscarParaActualizarStock(@Param("id") Integer id);
 }
