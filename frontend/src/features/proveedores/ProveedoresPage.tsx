@@ -6,6 +6,7 @@ import {
 } from './proveedoresApi'
 import { mensajeDeError } from '../../api/cliente'
 import { obtenerUsuario } from '../auth/sesion'
+import DialogoMotivo, { type AccionConMotivo } from '../../components/DialogoMotivo'
 
 function ProveedoresPage() {
     const [proveedores, setProveedores] = useState<Proveedor[]>([])
@@ -13,7 +14,8 @@ function ProveedoresPage() {
     const [error, setError] = useState<string | null>(null)          // error al CARGAR la lista
     const [errorAccion, setErrorAccion] = useState<string | null>(null) // error de baja/reactivar/eliminar
     const [verInactivos, setVerInactivos] = useState(false)
-    const [recargar, setRecargar] = useState(0)                      // cambiarlo vuelve a pedir la lista
+    const [recargar, setRecargar] = useState(0)
+    const [pendiente, setPendiente] = useState<AccionConMotivo | null>(null)   /* acción esperando motivo */
     const esAdmin = obtenerUsuario()?.rol === 'ADMINISTRADOR'
 
     useEffect(() => {
@@ -36,34 +38,39 @@ function ProveedoresPage() {
         setVerInactivos(v => !v)
     }
 
-    /* Ejecuta una acción y, si sale bien, recarga la lista desde el backend (opción a) */
-    async function ejecutar(accion: () => Promise<void>) {
+    /* Abre el diálogo de motivo; si la acción sale bien, recarga la lista desde el backend */
+    function pedirMotivo(accion: AccionConMotivo) {
         setErrorAccion(null)
-        try {
-            await accion()
-            setRecargar(n => n + 1)
-        } catch (err) {
-            setErrorAccion(mensajeDeError(err))
-        }
+        setPendiente({ ...accion, ejecutar: async motivo => { await accion.ejecutar(motivo); setRecargar(n => n + 1) } })
     }
 
     function darDeBaja(p: Proveedor) {
-        if (!window.confirm(`¿Dar de baja a "${p.razonSocial}"? Podrás reactivarlo después.`)) return
-        ejecutar(() => darDeBajaProveedor(p.idProveedor))
+        pedirMotivo({
+            titulo: 'Dar de baja proveedor', textoBoton: 'Dar de baja', peligro: true,
+            mensaje: `"${p.razonSocial}" dejará de aparecer en la lista. Podrás reactivarlo después.`,
+            ejecutar: motivo => darDeBajaProveedor(p.idProveedor, motivo),
+        })
     }
 
     function reactivar(p: Proveedor) {
-        if (!window.confirm(`¿Reactivar a "${p.razonSocial}"?`)) return
-        ejecutar(() => reactivarProveedor(p.idProveedor))
+        pedirMotivo({
+            titulo: 'Reactivar proveedor', textoBoton: 'Reactivar',
+            mensaje: `"${p.razonSocial}" volverá a estar disponible.`,
+            ejecutar: motivo => reactivarProveedor(p.idProveedor, motivo),
+        })
     }
 
     function eliminar(p: Proveedor) {
-        if (!window.confirm(`¿Eliminar DEFINITIVAMENTE a "${p.razonSocial}"? Esta acción NO se puede deshacer.`)) return
-        ejecutar(() => eliminarProveedor(p.idProveedor))
+        pedirMotivo({
+            titulo: 'Eliminar proveedor DEFINITIVAMENTE', textoBoton: 'Eliminar', peligro: true,
+            mensaje: `Se borrará "${p.razonSocial}" de la base de datos. Esta acción NO se puede deshacer.`,
+            ejecutar: motivo => eliminarProveedor(p.idProveedor, motivo),
+        })
     }
 
     return (
         <>
+            {pendiente && <DialogoMotivo accion={pendiente} onCerrar={() => setPendiente(null)} />}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="h3 text-primary mb-0">
                     {verInactivos ? 'Proveedores inactivos' : 'Proveedores'}

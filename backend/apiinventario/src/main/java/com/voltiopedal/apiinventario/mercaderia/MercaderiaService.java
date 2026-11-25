@@ -1,5 +1,7 @@
 package com.voltiopedal.apiinventario.mercaderia;
 
+import com.voltiopedal.apiinventario.auditoria.AccionAuditoria;
+import com.voltiopedal.apiinventario.auditoria.AuditoriaService;
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 import com.voltiopedal.apiinventario.common.ValidacionException;
@@ -21,18 +23,23 @@ public class MercaderiaService {
     private final MercaderiaRepository mercaderiaRepository;
     private final ProveedorRepository proveedorRepository;
     private final TipoRepuestoRepository tipoRepuestoRepository;
+    private final AuditoriaService auditoriaService;
 
     public MercaderiaService(MercaderiaRepository mercaderiaRepository,
-                             ProveedorRepository proveedorRepository,
-                             TipoRepuestoRepository tipoRepuestoRepository) {
+            ProveedorRepository proveedorRepository,
+            TipoRepuestoRepository tipoRepuestoRepository,
+            AuditoriaService auditoriaService) {
         this.mercaderiaRepository = mercaderiaRepository;
         this.proveedorRepository = proveedorRepository;
         this.tipoRepuestoRepository = tipoRepuestoRepository;
+        this.auditoriaService = auditoriaService;
     }
 
-    /* ==============================
-     *          C - CREAR
-     * ============================== */
+    /*
+     * ==============================
+     * C - CREAR
+     * ==============================
+     */
 
     @Transactional
     public MercaderiaResponse registrar(MercaderiaRequest request) {
@@ -43,15 +50,17 @@ public class MercaderiaService {
 
         Mercaderia mercaderia = crearSegunTipo(request.tipo());
         aplicarDatos(mercaderia, request, sku);
-        mercaderia.setStock(0);                          /* el stock nace en 0 */
+        mercaderia.setStock(0); /* el stock nace en 0 */
         mercaderia.setFechaIngreso(LocalDateTime.now());
 
         return aResponse(mercaderiaRepository.save(mercaderia));
     }
 
-    /* ==============================
-     *          R - CONSULTAR
-     * ============================== */
+    /*
+     * ==============================
+     * R - CONSULTAR
+     * ==============================
+     */
 
     @Transactional(readOnly = true)
     public List<MercaderiaResponse> listarActivas() {
@@ -73,9 +82,11 @@ public class MercaderiaService {
         return mercaderiaRepository.listarConStockBajo().stream().map(this::aResponse).toList();
     }
 
-    /* ==============================
-     *          U - ACTUALIZAR
-     * ============================== */
+    /*
+     * ==============================
+     * U - ACTUALIZAR
+     * ==============================
+     */
 
     @Transactional
     public MercaderiaResponse actualizar(Integer id, MercaderiaRequest request) {
@@ -91,49 +102,59 @@ public class MercaderiaService {
         }
 
         aplicarDatos(mercaderia, request, sku);
-        return aResponse(mercaderia);   /* dirty checking: JPA guarda los cambios al terminar la transacción */
+        return aResponse(mercaderia); /* dirty checking: JPA guarda los cambios al terminar la transacción */
     }
 
-    /* ==============================
-     *   D - BAJA LÓGICA / REACTIVAR
-     * ============================== */
+    /*
+     * ==============================
+     * D - BAJA LÓGICA / REACTIVAR
+     * ==============================
+     */
 
     @Transactional
-    public void desactivar(Integer id) {
+    public void desactivar(Integer id, String motivo, Integer idUsuario) {
         Mercaderia mercaderia = obtenerPorId(id);
         if (!mercaderia.getActivo()) {
             throw new ReglaNegocioException("La mercadería ya está dada de baja.");
         }
         mercaderia.setActivo(false);
+        auditoriaService.registrar(idUsuario, AccionAuditoria.INACTIVACION, "MERCADERIA", mercaderia.getSku(), motivo);
     }
 
     @Transactional
-    public void reactivar(Integer id) {
+    public void reactivar(Integer id, String motivo, Integer idUsuario) {
         Mercaderia mercaderia = obtenerPorId(id);
         if (mercaderia.getActivo()) {
             throw new ReglaNegocioException("La mercadería ya está activa.");
         }
         mercaderia.setActivo(true);
+        auditoriaService.registrar(idUsuario, AccionAuditoria.REACTIVACION, "MERCADERIA", mercaderia.getSku(), motivo);
     }
 
-    /* ==============================
-     *       D - ELIMINAR FÍSICO
-     * ============================== */
+    /*
+     * ==============================
+     * D - ELIMINAR FÍSICO
+     * ==============================
+     */
 
     @Transactional
-    public void eliminarFisico(Integer id) {
+    public void eliminarFisico(Integer id, String motivo, Integer idUsuario) {
         Mercaderia mercaderia = obtenerPorId(id);
+        String sku = mercaderia.getSku();
         try {
             mercaderiaRepository.delete(mercaderia);
             mercaderiaRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new ReglaNegocioException("No se puede eliminar la mercadería porque tiene movimientos asociados (ingresos, ventas o servicios). Use 'Dar de baja'.");
         }
+        auditoriaService.registrar(idUsuario, AccionAuditoria.ELIMINACION_FISICA, "MERCADERIA", sku, motivo);
     }
 
-    /* ==============================
-     *       MÉTODOS AUXILIARES
-     * ============================== */
+    /*
+     * ==============================
+     * MÉTODOS AUXILIARES
+     * ==============================
+     */
 
     private Mercaderia obtenerPorId(Integer id) {
         return mercaderiaRepository.findById(id).orElseThrow(
@@ -168,7 +189,10 @@ public class MercaderiaService {
         };
     }
 
-    /* Valida según el tipo y copia los datos del Request a la entidad (sirve para crear y editar) */
+    /*
+     * Valida según el tipo y copia los datos del Request a la entidad (sirve para
+     * crear y editar)
+     */
     private void aplicarDatos(Mercaderia m, MercaderiaRequest r, String sku) {
         Map<String, String> errores = new LinkedHashMap<>();
 
@@ -178,16 +202,23 @@ public class MercaderiaService {
 
         switch (m) {
             case Scooter _ -> {
-                if (r.autonomiaKm() == null) errores.put("autonomiaKm", "La autonomía es obligatoria para un scooter.");
-                if (r.potenciaWatts() == null) errores.put("potenciaWatts", "La potencia es obligatoria para un scooter.");
-                if (vacioANull(r.color()) == null) errores.put("color", "El color es obligatorio para un scooter.");
-                if (r.mesesGarantia() == null) errores.put("mesesGarantia", "La garantía es obligatoria para un scooter.");
+                if (r.autonomiaKm() == null)
+                    errores.put("autonomiaKm", "La autonomía es obligatoria para un scooter.");
+                if (r.potenciaWatts() == null)
+                    errores.put("potenciaWatts", "La potencia es obligatoria para un scooter.");
+                if (vacioANull(r.color()) == null)
+                    errores.put("color", "El color es obligatorio para un scooter.");
+                if (r.mesesGarantia() == null)
+                    errores.put("mesesGarantia", "La garantía es obligatoria para un scooter.");
             }
             case Repuesto _ -> {
-                if (r.idTipoRepuesto() == null) errores.put("idTipoRepuesto", "El tipo de repuesto es obligatorio.");
-                if (vacioANull(r.modelosCompatibles()) == null) errores.put("modelosCompatibles", "Los modelos compatibles son obligatorios.");
+                if (r.idTipoRepuesto() == null)
+                    errores.put("idTipoRepuesto", "El tipo de repuesto es obligatorio.");
+                if (vacioANull(r.modelosCompatibles()) == null)
+                    errores.put("modelosCompatibles", "Los modelos compatibles son obligatorios.");
             }
-            default -> { /* ACCESORIO: talla y color son opcionales */ }
+            default -> {
+                /* ACCESORIO: talla y color son opcionales */ }
         }
 
         if (!errores.isEmpty()) {
@@ -195,9 +226,13 @@ public class MercaderiaService {
         }
 
         Proveedor proveedor = proveedorRepository.findById(r.idProveedor()).orElseThrow(
-                () -> new RecursoNoEncontradoException("No se encontró ningún proveedor con el id: " + r.idProveedor()));
+                () -> new RecursoNoEncontradoException(
+                        "No se encontró ningún proveedor con el id: " + r.idProveedor()));
 
-        /* Un proveedor dado de baja no puede asignarse (pero si ya era el proveedor, se permite editar lo demás) */
+        /*
+         * Un proveedor dado de baja no puede asignarse (pero si ya era el proveedor, se
+         * permite editar lo demás)
+         */
         boolean cambiaProveedor = m.getProveedor() == null
                 || !m.getProveedor().getIdProveedor().equals(proveedor.getIdProveedor());
         if (cambiaProveedor && !proveedor.getActivo()) {
@@ -220,7 +255,8 @@ public class MercaderiaService {
             }
             case Repuesto rep -> {
                 TipoRepuesto tipo = tipoRepuestoRepository.findById(r.idTipoRepuesto()).orElseThrow(
-                        () -> new RecursoNoEncontradoException("No se encontró ningún tipo de repuesto con el id: " + r.idTipoRepuesto()));
+                        () -> new RecursoNoEncontradoException(
+                                "No se encontró ningún tipo de repuesto con el id: " + r.idTipoRepuesto()));
                 rep.setTipoRepuesto(tipo);
                 rep.setModelosCompatibles(r.modelosCompatibles().trim());
             }
@@ -253,7 +289,8 @@ public class MercaderiaService {
                 talla = a.getTalla();
                 color = a.getColor();
             }
-            default -> { }
+            default -> {
+            }
         }
 
         return new MercaderiaResponse(

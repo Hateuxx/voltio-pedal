@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { mensajeDeError } from '../../api/cliente'
 import { obtenerUsuario } from '../auth/sesion'
+import DialogoMotivo, { type AccionConMotivo } from '../../components/DialogoMotivo'
 import {
     darDeBajaMercaderia, eliminarMercaderia, ETIQUETA_TIPO, listarMercaderias,
     listarMercaderiasInactivas, reactivarMercaderia, type Mercaderia, type TipoMercaderia,
@@ -28,6 +29,7 @@ export default function MercaderiaPage() {
     const [errorAccion, setErrorAccion] = useState<string | null>(null)
     const [verInactivos, setVerInactivos] = useState(false)
     const [recargar, setRecargar] = useState(0)
+    const [pendiente, setPendiente] = useState<AccionConMotivo | null>(null)
     const [filtroTipo, setFiltroTipo] = useState<'TODOS' | TipoMercaderia>('TODOS')
     const [busqueda, setBusqueda] = useState('')
     const esAdmin = obtenerUsuario()?.rol === 'ADMINISTRADOR'
@@ -54,33 +56,39 @@ export default function MercaderiaPage() {
         setVerInactivos(v => !v)
     }
 
-    async function ejecutar(accion: () => Promise<void>) {
+    /* Abre el diálogo de motivo; si la acción sale bien, recarga la lista desde el backend */
+    function pedirMotivo(accion: AccionConMotivo) {
         setErrorAccion(null)
-        try {
-            await accion()
-            setRecargar(n => n + 1)
-        } catch (err) {
-            setErrorAccion(mensajeDeError(err))
-        }
+        setPendiente({ ...accion, ejecutar: async motivo => { await accion.ejecutar(motivo); setRecargar(n => n + 1) } })
     }
 
     function darDeBaja(m: Mercaderia) {
-        if (!window.confirm(`¿Dar de baja "${m.descripcion}" (${m.sku})? Podrás reactivarla después.`)) return
-        ejecutar(() => darDeBajaMercaderia(m.idMercaderia))
+        pedirMotivo({
+            titulo: 'Dar de baja mercadería', textoBoton: 'Dar de baja', peligro: true,
+            mensaje: `"${m.descripcion}" (${m.sku}) dejará de venderse. Podrás reactivarla después.`,
+            ejecutar: motivo => darDeBajaMercaderia(m.idMercaderia, motivo),
+        })
     }
 
     function reactivar(m: Mercaderia) {
-        if (!window.confirm(`¿Reactivar "${m.descripcion}" (${m.sku})?`)) return
-        ejecutar(() => reactivarMercaderia(m.idMercaderia))
+        pedirMotivo({
+            titulo: 'Reactivar mercadería', textoBoton: 'Reactivar',
+            mensaje: `"${m.descripcion}" (${m.sku}) volverá al catálogo.`,
+            ejecutar: motivo => reactivarMercaderia(m.idMercaderia, motivo),
+        })
     }
 
     function eliminar(m: Mercaderia) {
-        if (!window.confirm(`¿Eliminar DEFINITIVAMENTE "${m.descripcion}" (${m.sku})? Esta acción NO se puede deshacer.`)) return
-        ejecutar(() => eliminarMercaderia(m.idMercaderia))
+        pedirMotivo({
+            titulo: 'Eliminar mercadería DEFINITIVAMENTE', textoBoton: 'Eliminar', peligro: true,
+            mensaje: `Se borrará "${m.descripcion}" (${m.sku}). Esta acción NO se puede deshacer.`,
+            ejecutar: motivo => eliminarMercaderia(m.idMercaderia, motivo),
+        })
     }
 
     return (
         <>
+            {pendiente && <DialogoMotivo accion={pendiente} onCerrar={() => setPendiente(null)} />}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h1 className="h3 text-primary mb-0">
                     {verInactivos ? 'Mercadería inactiva' : 'Mercadería'}

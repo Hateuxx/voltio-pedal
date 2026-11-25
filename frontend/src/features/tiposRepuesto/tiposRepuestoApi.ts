@@ -24,6 +24,6 @@ export function actualizarTipoRepuesto(id: number, nombre: string) {
     })
 }
 
-export function eliminarTipoRepuesto(id: number) {
-    return api<void>(`/api/tipos-repuesto/${id}`, { method: 'DELETE' })
+export function eliminarTipoRepuesto(id: number, motivo: string) {
+    return api<void>(`/api/tipos-repuesto/${id}`, { method: 'DELETE', body: JSON.stringify({ motivo }) })
 }

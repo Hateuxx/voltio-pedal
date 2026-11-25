@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { ErrorApi, mensajeDeError } from '../../api/cliente'
 import { obtenerUsuario } from '../auth/sesion'
+import DialogoMotivo, { type AccionConMotivo } from '../../components/DialogoMotivo'
 import {
     actualizarTipoRepuesto, crearTipoRepuesto, eliminarTipoRepuesto,
     listarTiposRepuesto, type TipoRepuesto,
@@ -12,6 +13,7 @@ export default function TiposRepuestoPage() {
     const [error, setError] = useState<string | null>(null)             // al cargar la lista
     const [errorAccion, setErrorAccion] = useState<string | null>(null) // al eliminar
     const [recargar, setRecargar] = useState(0)
+    const [pendiente, setPendiente] = useState<AccionConMotivo | null>(null)
 
     /* Formulario: el mismo sirve para crear y editar */
     const [nombre, setNombre] = useState('')
@@ -64,20 +66,22 @@ export default function TiposRepuestoPage() {
         }
     }
 
-    async function eliminar(t: TipoRepuesto) {
-        if (!window.confirm(`¿Eliminar DEFINITIVAMENTE el tipo "${t.nombre}"? Esta acción NO se puede deshacer.`)) return
+    function eliminar(t: TipoRepuesto) {
         setErrorAccion(null)
-        try {
-            await eliminarTipoRepuesto(t.idTipoRepuesto)
-            if (editando?.idTipoRepuesto === t.idTipoRepuesto) limpiarFormulario()
-            setRecargar(n => n + 1)
-        } catch (err) {
-            setErrorAccion(mensajeDeError(err))
-        }
+        setPendiente({
+            titulo: 'Eliminar tipo de repuesto', textoBoton: 'Eliminar', peligro: true,
+            mensaje: `Se borrará el tipo "${t.nombre}". Esta acción NO se puede deshacer.`,
+            ejecutar: async motivo => {
+                await eliminarTipoRepuesto(t.idTipoRepuesto, motivo)
+                if (editando?.idTipoRepuesto === t.idTipoRepuesto) limpiarFormulario()
+                setRecargar(n => n + 1)
+            },
+        })
     }
 
     return (
         <div className="col-lg-8">
+            {pendiente && <DialogoMotivo accion={pendiente} onCerrar={() => setPendiente(null)} />}
             <h1 className="h3 text-primary mb-4">Tipos de repuesto</h1>
 
             {esAdmin && (

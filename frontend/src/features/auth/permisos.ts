@@ -13,6 +13,11 @@ export const MENU: OpcionMenu[] = [
     { ruta: '/mercaderia', texto: 'Mercadería', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
     { ruta: '/ingresos', texto: 'Ingresos', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA'] },
     { ruta: '/conteos', texto: 'Conteos', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA'] },
+    { ruta: '/clientes', texto: 'Clientes', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
+    { ruta: '/ventas', texto: 'Ventas', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA'] },
+    { ruta: '/servicios', texto: 'Servicio técnico', roles: ['ADMINISTRADOR', 'OPERADOR_TIENDA', 'TECNICO'] },
+    { ruta: '/reportes', texto: 'Reportes', roles: ['ADMINISTRADOR'] },
+    { ruta: '/auditoria', texto: 'Auditoría', roles: ['ADMINISTRADOR'] },
 ]
 
 export function rolesDe(ruta: string): RolUsuario[] {

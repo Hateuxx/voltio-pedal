@@ -3,6 +3,9 @@ package com.voltiopedal.apiinventario.tiporepuesto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.voltiopedal.apiinventario.auditoria.AccionAuditoria;
+import com.voltiopedal.apiinventario.auditoria.AuditoriaService;
 import com.voltiopedal.apiinventario.common.RecursoNoEncontradoException;
 import com.voltiopedal.apiinventario.common.ReglaNegocioException;
 
@@ -11,9 +14,11 @@ import java.util.List;
 @Service 
 public class TipoRepuestoService {
     private final TipoRepuestoRepository tipoRepuestoRepository;
+    private final AuditoriaService auditoriaService;
 
-    public TipoRepuestoService(TipoRepuestoRepository tipoRepuestoRepository){
+    public TipoRepuestoService(TipoRepuestoRepository tipoRepuestoRepository, AuditoriaService auditoriaService) {
         this.tipoRepuestoRepository = tipoRepuestoRepository;
+        this.auditoriaService = auditoriaService;
     }
 
     /* ==============================
@@ -80,14 +85,16 @@ public class TipoRepuestoService {
 
     /* ELIMINACIÓN FÍSICA (D): borra la fila de la base de datos */
     @Transactional
-    public void eliminarFisico(Integer id) {
+    public void eliminarFisico(Integer id, String motivo, Integer idUsuario) {
         TipoRepuesto tipo = obtenerPorId(id);
+        String nombre = tipo.getNombre();
         try {
             tipoRepuestoRepository.delete(tipo);
             tipoRepuestoRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new ReglaNegocioException("No se puede eliminar el tipo de repuesto porque hay repuestos que lo usan.");
         }
+        auditoriaService.registrar(idUsuario, AccionAuditoria.ELIMINACION_FISICA, "TIPO_REPUESTO", nombre, motivo);
     }
 
     /* ==============================
