@@ -1,6 +1,8 @@
 package com.voltiopedal.apiinventario.ingresomercaderia;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record IngresoMercaderiaResponse(
     Integer idIngreso,
@@ -9,8 +11,18 @@ public record IngresoMercaderiaResponse(
     Integer idUsuario,
     String observacion,
     Boolean activo,
-    /* Datos que vienen de la tabla proveedor */
     Integer idProveedor,
     String rucProveedor,
-    String razonSocialProveedor
-) {}
+    String razonSocialProveedor,
+    List<Linea> detalles,
+    BigDecimal total
+) {
+    public record Linea(
+        Integer idMercaderia,
+        String sku,
+        String descripcion,
+        Integer cantidad,
+        BigDecimal costoUnitario,
+        BigDecimal subtotal
+    ) {}
+}
