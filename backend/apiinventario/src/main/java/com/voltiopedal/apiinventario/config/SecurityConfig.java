@@ -70,6 +70,28 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/ingresos", "/api/ingresos/**").hasAnyRole(ADMIN, OPERADOR)
                 .requestMatchers("/api/ingresos", "/api/ingresos/**").hasRole(ADMIN)
 
+                /* Ventas (solo consulta): consultar admin y operador, lo demás solo admin */
+                .requestMatchers(HttpMethod.GET, "/api/ventas", "/api/ventas/**").hasAnyRole(ADMIN, OPERADOR)
+                .requestMatchers("/api/ventas", "/api/ventas/**").hasRole(ADMIN)
+
+                /* Mercadería: consultar (todos), lo demás solo admin */
+                .requestMatchers(HttpMethod.GET, "/api/mercaderias", "/api/mercaderias/**").hasAnyRole(ADMIN, OPERADOR, TECNICO)
+                .requestMatchers("/api/mercaderias", "/api/mercaderias/**").hasRole(ADMIN)
+
+                /* Movimientos de inventario (solo consulta): consultar admin y operador, lo demás solo admin */
+                .requestMatchers(HttpMethod.GET, "/api/movimientos", "/api/movimientos/**").hasAnyRole(ADMIN, OPERADOR)
+                .requestMatchers("/api/movimientos", "/api/movimientos/**").hasRole(ADMIN)
+
+                /* Servicio técnico: consultar (todos), registrar y actualizar (admin y técnico), lo demás solo admin */
+                .requestMatchers(HttpMethod.GET, "/api/servicios-tecnicos", "/api/servicios-tecnicos/**").hasAnyRole(ADMIN, OPERADOR, TECNICO)
+                .requestMatchers(HttpMethod.POST, "/api/servicios-tecnicos").hasAnyRole(ADMIN, TECNICO)
+                .requestMatchers(HttpMethod.PUT, "/api/servicios-tecnicos/**").hasAnyRole(ADMIN, TECNICO)
+                .requestMatchers("/api/servicios-tecnicos", "/api/servicios-tecnicos/**").hasRole(ADMIN)
+
+                /* Reportes: solo el administrador */
+                .requestMatchers("/api/reportes", "/api/reportes/**").hasRole(ADMIN)
+
+                
                 /* Cualquier otra ruta: basta con haber iniciado sesión */
                 .anyRequest().authenticated())
             /* Activa la validación del token JWT y la lectura del rol */

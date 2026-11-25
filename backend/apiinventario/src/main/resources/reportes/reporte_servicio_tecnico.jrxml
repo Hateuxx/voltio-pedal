@@ -1,0 +1,470 @@
+<!-- Created with Jaspersoft Studio version 7.0.8.final using JasperReports Library version 7.0.8-6f896111  -->
+<jasperReport name="reporte_servicio_tecnico" language="java" columnCount="1" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="504f2d12-1138-4df2-b782-41bda89ef6e1">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="servicio_prueba"/>
+	<parameter name="titulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["ATENCIONES DE SERVICIO TÉCNICO"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaInicio" class="java.lang.String">
+		<defaultValueExpression><![CDATA["01/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaFin" class="java.lang.String">
+		<defaultValueExpression><![CDATA["30/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaEmision" class="java.lang.String">
+		<defaultValueExpression><![CDATA["19/11/2026 10:00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalRegistros" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[15]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cubiertosPorGarantia" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[7]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalEntregados" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[3]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalEnCurso" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[12]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tiempoMayor" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SN-0005 (2 d 4 h)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tiempoMenor" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SN-0012 (35 min)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tiempoPromedio" class="java.lang.String">
+		<defaultValueExpression><![CDATA["1 d 3 h"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="antiguedadMayor" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SN-0001 (12 d 2 h)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="antiguedadPromedio" class="java.lang.String">
+		<defaultValueExpression><![CDATA["6 d 5 h"]]></defaultValueExpression>
+	</parameter>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="fechaIngreso" class="java.lang.String"/>
+	<field name="fechaEntrega" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="scooter" class="java.lang.String"/>
+	<field name="numeroSerie" class="java.lang.String"/>
+	<field name="fallaReportada" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="tecnico" class="java.lang.String"/>
+	<field name="garantia" class="java.lang.String"/>
+	<group name="estadoServicio" keepTogether="true">
+		<expression><![CDATA[$F{estado}]]></expression>
+		<groupHeader>
+			<band height="22">
+				<element kind="rectangle" uuid="360202a3-df8d-4cb8-8106-cc8454b91635" x="0" y="0" width="802" height="22" forecolor="#E8EEF3" backcolor="#E8EEF3" mode="Opaque">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<pen lineWidth="0.0"/>
+				</element>
+				<element kind="textField" uuid="b558afe9-028c-4f99-9a56-4555d97ebbd2" x="4" y="3" width="400" height="16" fontSize="10.0" bold="true" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<expression><![CDATA[$F{estado}]]></expression>
+				</element>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<element kind="line" uuid="d753bc02-c8d5-4b85-ab8f-490adbe4e5bb" x="0" y="0" width="802" height="1" forecolor="#0B3C5D">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</element>
+				<element kind="staticText" uuid="d4a1e529-e143-4fbe-8c11-d8eb1dfde225" x="520" y="3" width="240" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<box rightPadding="0"/>
+					<text><![CDATA[SERVICIOS EN ESTE ESTADO:]]></text>
+				</element>
+				<element kind="textField" uuid="c8fe213e-b9eb-4148-9ecf-b6f079c987de" x="760" y="3" width="42" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<box rightPadding="4"/>
+					<expression><![CDATA[$V{estadoServicio_COUNT}]]></expression>
+				</element>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</band>
+		</groupFooter>
+	</group>
+	<background splitType="Stretch"/>
+	<title height="94" splitType="Stretch">
+		<element kind="staticText" uuid="c631f072-588b-4042-8eb3-9d246f308263" x="0" y="5" width="300" height="28" forecolor="#0B305D" markup="none" fontName="SansSerif" fontSize="20.0">
+			<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<text><![CDATA[VOLTIO & PEDAL]]></text>
+		</element>
+		<element kind="staticText" uuid="28fa365d-34fc-433c-92f3-4e0de32ed17a" x="0" y="35" width="300" height="16">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<text><![CDATA[Scooters, repuestos y accesorios]]></text>
+		</element>
+		<element kind="staticText" uuid="ec23e312-1a6e-4b4d-ab9e-fed1b208a23a" x="0" y="51" width="300" height="16">
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<text><![CDATA[Sistema de control de inventario]]></text>
+		</element>
+		<element kind="rectangle" uuid="5c5d7388-0849-4f82-b3b8-64818bb28bf5" x="592" y="5" width="210" height="75" mode="Transparent" radius="8">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<pen lineStyle="Solid" lineColor="#0B2F5A"/>
+		</element>
+		<element kind="textField" uuid="36a29edd-c579-44f1-afac-8c778e079def" x="597" y="10" width="200" height="22" markup="none" fontSize="12.0" textAdjust="ScaleFont" bold="true" hTextAlign="Center">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<box leftPadding="4" rightPadding="4"/>
+			<expression><![CDATA[$P{titulo}]]></expression>
+		</element>
+		<element kind="textField" uuid="6aeacab7-b7c9-40d4-944c-19e1b41e0407" x="597" y="34" width="200" height="16" hTextAlign="Center">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA["Del " + $P{fechaInicio} + " al " + $P{fechaFin}]]></expression>
+		</element>
+		<element kind="textField" uuid="8f8ff80c-1286-43a0-8251-5298da494b54" x="597" y="52" width="200" height="16" fontSize="8.0" hTextAlign="Center">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA["Emitido: " + $P{fechaEmision}]]></expression>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</title>
+	<pageHeader height="39" splitType="Stretch"/>
+	<columnHeader height="28" splitType="Stretch">
+		<element kind="staticText" uuid="cf95b190-0499-484f-ba96-0103d504f93e" x="0" y="4" width="80" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[INGRESO]]></text>
+		</element>
+		<element kind="staticText" uuid="7e1c576f-4219-473d-a70f-f702e5e3aadf" x="80" y="4" width="80" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[ENTREGA]]></text>
+		</element>
+		<element kind="staticText" uuid="9f1db5cb-250e-4bc5-95ff-83740e551b85" x="160" y="4" width="105" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[CLIENTE]]></text>
+		</element>
+		<element kind="staticText" uuid="02feadd4-fd60-4435-9989-4c342f6017bb" x="265" y="4" width="145" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[SCOOTER]]></text>
+		</element>
+		<element kind="staticText" uuid="d0baeab8-bd08-46fd-88ab-4fcec7b34631" x="410" y="4" width="70" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[N° SERIE]]></text>
+		</element>
+		<element kind="staticText" uuid="2547094d-f1e8-4125-aabd-3619408fb777" x="480" y="4" width="160" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[FALLA REPORTADA]]></text>
+		</element>
+		<element kind="staticText" uuid="1ad63e22-1280-448a-a784-64b4d2ab63c4" x="640" y="4" width="90" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[TÉCNICO]]></text>
+		</element>
+		<element kind="staticText" uuid="63319bc7-d2f8-43db-984b-1c5aa51e9c58" x="730" y="4" width="72" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<text><![CDATA[GARANTÍA]]></text>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<element kind="textField" uuid="7e92cf8b-af0f-4bb9-9023-e341c525ea61" x="0" y="0" width="80" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<expression><![CDATA[$F{fechaIngreso}]]></expression>
+			</element>
+			<element kind="textField" uuid="268a9a5b-0c4f-43b8-8f6b-17560b886053" x="80" y="0" width="80" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<expression><![CDATA[$F{fechaEntrega}]]></expression>
+			</element>
+			<element kind="textField" uuid="9762b1fc-58e9-468f-938d-9f5e77e77789" x="160" y="0" width="105" height="15" fontSize="8.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="4" bottomPadding="1"/>
+				<expression><![CDATA[$F{cliente}]]></expression>
+			</element>
+			<element kind="textField" uuid="71f55606-bf0e-49e4-8f5b-4576d7d31b7c" x="265" y="0" width="145" height="15" fontSize="8.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="4" bottomPadding="1"/>
+				<expression><![CDATA[$F{scooter}]]></expression>
+			</element>
+			<element kind="textField" uuid="d919d2fa-0a45-4829-b977-bc5b50adb2ce" x="410" y="0" width="70" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="0"/>
+				<expression><![CDATA[$F{numeroSerie}]]></expression>
+			</element>
+			<element kind="textField" uuid="3c78840b-a85d-4d03-91fa-8e89d6874366" x="480" y="0" width="160" height="15" fontSize="8.0" textAdjust="StretchHeight" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="4" bottomPadding="1"/>
+				<expression><![CDATA[$F{fallaReportada}]]></expression>
+			</element>
+			<element kind="textField" uuid="1f3d9524-fed8-45de-8e8d-c547b6f7efcf" x="640" y="0" width="90" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{tecnico}]]></expression>
+			</element>
+			<element kind="textField" uuid="3ba16064-44c3-43b2-8cfe-89bd1b44fda6" x="730" y="0" width="72" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<box leftPadding="0"/>
+				<expression><![CDATA[$F{garantia}]]></expression>
+			</element>
+			<element kind="line" uuid="61aeea1d-7c20-4799-8f8a-d46d72c77bfb" x="0" y="15" width="802" height="1" forecolor="#BFBFBF" mode="Opaque" positionType="Float">
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</detail>
+	<columnFooter splitType="Stretch">
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</columnFooter>
+	<pageFooter height="38" splitType="Stretch">
+		<element kind="staticText" uuid="4fdde3e3-e4c7-4f76-8541-77e184deac47" x="0" y="6" width="300" height="16" forecolor="#9C9C9C" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Voltio & Pedal - Sistema de control de inventario]]></text>
+		</element>
+		<element kind="textField" uuid="4b68bdb9-2f1a-4753-9046-7715b5f0c811" x="682" y="6" width="80" height="16" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+		</element>
+		<element kind="textField" uuid="118a6189-c2a9-43e1-a559-d6ce7d40bdb4" x="762" y="6" width="40" height="16" evaluationTime="Report" hTextAlign="Left">
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+		<element kind="line" uuid="7422fe97-fc3f-4db7-bf32-5e35430aeab2" x="0" y="0" width="802" height="1" forecolor="#BFBFBF">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</pageFooter>
+	<summary height="90" splitType="Stretch">
+		<element kind="rectangle" uuid="573e982b-0b6e-4041-9027-c4c5d5714a17" x="592" y="4" width="210" height="66" forecolor="#0B3C5D" radius="8">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="c14db79e-dffb-4530-a5d4-23d60f5c0ae5" x="599" y="8" width="140" height="14" fontSize="9.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Total de servicios:]]></text>
+		</element>
+		<element kind="staticText" uuid="2b416203-4a0a-4f67-9a9c-7dcdc561f174" x="599" y="22" width="140" height="14" fontSize="9.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[En curso:]]></text>
+		</element>
+		<element kind="staticText" uuid="7e951c0c-08f2-4b89-8f48-38d75baf52db" x="599" y="36" width="140" height="14" fontSize="9.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Entregados:]]></text>
+		</element>
+		<element kind="staticText" uuid="23c235ab-6510-48e6-bfe1-2838d8ccf8df" x="599" y="50" width="140" height="14" fontSize="9.0" bold="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Cubiertos por garantía:]]></text>
+		</element>
+		<element kind="textField" uuid="3bf4d66c-17a8-495f-a660-0fc4052024ba" x="739" y="8" width="56" height="14" fontSize="9.0" blankWhenNull="true" hTextAlign="Right">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{totalRegistros}]]></expression>
+		</element>
+		<element kind="textField" uuid="2003a3ba-9290-4950-b395-faa7909f2bdc" x="739" y="22" width="56" height="14" fontSize="9.0" blankWhenNull="true" hTextAlign="Right">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{totalEnCurso}]]></expression>
+		</element>
+		<element kind="textField" uuid="4e991f51-c165-4af1-a575-91962391ca9e" x="739" y="36" width="56" height="14" fontSize="9.0" blankWhenNull="true" hTextAlign="Right">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{totalEntregados}]]></expression>
+		</element>
+		<element kind="textField" uuid="cd9c81e1-3a62-451a-9333-508113feb7b3" x="739" y="50" width="56" height="14" fontSize="9.0" bold="true" blankWhenNull="true" hTextAlign="Right">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{cubiertosPorGarantia}]]></expression>
+		</element>
+		<element kind="rectangle" uuid="d82a8c83-45ef-4c47-bc56-cae50e17a795" x="0" y="4" width="330" height="80" radius="8">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<pen lineColor="#0B3C5D"/>
+		</element>
+		<element kind="staticText" uuid="2ff00f53-5a51-44aa-a44f-2a2c7072b289" x="7" y="8" width="315" height="12" forecolor="#0B3C5D" fontSize="8.0" bold="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<text><![CDATA[ESTADÍSTICAS DEL PERIODO]]></text>
+		</element>
+		<element kind="staticText" uuid="86284b72-898d-46c1-809b-b7bcd949168c" x="7" y="22" width="175" height="12" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Atención más larga (entregados):]]></text>
+		</element>
+		<element kind="staticText" uuid="b46c7799-f218-4c53-b53a-67b50f589985" x="7" y="34" width="175" height="12" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Atención más corta (entregados):]]></text>
+		</element>
+		<element kind="staticText" uuid="0126c692-a23b-47d0-bd62-28fa27cfdd5f" x="7" y="46" width="175" height="12" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Atención promedio (entregados):]]></text>
+		</element>
+		<element kind="staticText" uuid="a92b54de-af57-4c31-b3c1-ebe0e06b420e" x="7" y="58" width="175" height="12" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Pendiente más antiguo:]]></text>
+		</element>
+		<element kind="staticText" uuid="d1fccafe-f9fb-4f21-b849-2050b0ec1ccc" x="7" y="70" width="175" height="12" fontSize="8.0">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<text><![CDATA[Antigüedad promedio (pendientes):]]></text>
+		</element>
+		<element kind="textField" uuid="2f1cf877-7cad-4c7b-8daa-f0ad86d350ac" x="182" y="22" width="143" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{tiempoMayor}]]></expression>
+		</element>
+		<element kind="textField" uuid="e00c1552-e52f-4966-b155-9403e3133791" x="182" y="34" width="143" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{tiempoMenor}]]></expression>
+		</element>
+		<element kind="textField" uuid="e24d8cda-5606-4932-b820-3825aef20a90" x="182" y="46" width="143" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{tiempoPromedio}]]></expression>
+		</element>
+		<element kind="textField" uuid="c6d14b85-29be-407b-bd18-e0890e1983b5" x="182" y="58" width="143" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{antiguedadMayor}]]></expression>
+		</element>
+		<element kind="textField" uuid="eaaebb99-0011-4f5b-9448-f6d102929c44" x="180" y="70" width="143" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<expression><![CDATA[$P{antiguedadPromedio}]]></expression>
+		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	</summary>
+</jasperReport>

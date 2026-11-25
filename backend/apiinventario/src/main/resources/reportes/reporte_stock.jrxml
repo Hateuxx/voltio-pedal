@@ -1,0 +1,235 @@
+<!-- Created with Jaspersoft Studio version 7.0.8.final using JasperReports Library version 7.0.8-6f896111  -->
+<jasperReport name="reporte_stock" language="java" columnCount="1" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3404457a-651f-4384-9f6e-a3c7d6c38d29">
+	<parameter name="titulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["STOCK DE PRODUCTOS"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaInicio" class="java.lang.String">
+		<defaultValueExpression><![CDATA["01/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaFin" class="java.lang.String">
+		<defaultValueExpression><![CDATA["30/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaEmision" class="java.lang.String">
+		<defaultValueExpression><![CDATA["24/11/2026 10:00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalRegistros" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[5]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mayorCaida" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SCO-001 (3 u.)"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bajoMinimo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="agotados" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="conDescuadre" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="normales" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[3]]></defaultValueExpression>
+	</parameter>
+	<parameter name="comparaStockActual" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Sí"]]></defaultValueExpression>
+	</parameter>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="sku" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="stockInicial" class="java.lang.Integer"/>
+	<field name="entradas" class="java.lang.Integer"/>
+	<field name="salidas" class="java.lang.Integer"/>
+	<field name="stockFinal" class="java.lang.Integer"/>
+	<field name="stockMinimo" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="descuadre" class="java.lang.String"/>
+	<group name="grupoTipo" keepTogether="true">
+		<expression><![CDATA[$F{tipo}]]></expression>
+		<groupHeader>
+			<band height="22">
+				<element kind="rectangle" uuid="1dea4b74-f6d4-4647-aa21-b6e403cad13b" x="0" y="0" width="555" height="22" backcolor="#E8EEF3">
+					<pen lineWidth="0.0"/>
+				</element>
+				<element kind="textField" uuid="b258d3f0-d509-4133-8fc1-05d8d85de0e4" x="4" y="3" width="400" height="16" bold="true" blankWhenNull="true" vTextAlign="Middle">
+					<expression><![CDATA["Tipo: " + $F{tipo}]]></expression>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<element kind="line" uuid="3f767034-6360-41c3-9d6f-a85cb8f12ec3" x="0" y="0" width="555" height="1" forecolor="#0B3C5D"/>
+				<element kind="staticText" uuid="bacd291c-1cbf-471c-b2e2-8ecbc7d1ead5" x="245" y="3" width="220" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<text><![CDATA[PRODUCTOS DE ESTE TIPO:]]></text>
+				</element>
+				<element kind="textField" uuid="8bd5e5ee-b9ba-4cf3-b08f-fcaccab8044d" x="465" y="3" width="90" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<box rightPadding="4"/>
+					<expression><![CDATA[$V{grupoTipo_COUNT}]]></expression>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<background splitType="Stretch"/>
+	<title height="94" splitType="Stretch">
+		<element kind="staticText" uuid="4e7d7824-4ea6-4581-8a07-9ef540e73c75" x="0" y="5" width="300" height="28" forecolor="#0B305D" markup="none" fontName="SansSerif" fontSize="20.0">
+			<text><![CDATA[VOLTIO & PEDAL]]></text>
+		</element>
+		<element kind="staticText" uuid="a0042ae2-edef-43cd-93c8-06a0e2ac3bcd" x="0" y="35" width="300" height="16">
+			<text><![CDATA[Scooters, repuestos y accesorios]]></text>
+		</element>
+		<element kind="staticText" uuid="c5314cd5-a2d2-4829-8df3-67150731f8cf" x="0" y="51" width="300" height="16">
+			<text><![CDATA[Sistema de control de inventario]]></text>
+		</element>
+		<element kind="rectangle" uuid="fc03b580-7169-4193-954c-1eceb49bb74a" x="345" y="5" width="210" height="75" mode="Transparent" radius="8">
+			<pen lineStyle="Solid" lineColor="#0B2F5A"/>
+		</element>
+		<element kind="textField" uuid="a92c8c73-f857-4610-bca1-0adebea77d39" x="350" y="10" width="200" height="22" markup="none" fontSize="12.0" textAdjust="ScaleFont" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{titulo}]]></expression>
+		</element>
+		<element kind="textField" uuid="8534e951-d860-486b-863d-ea1878c446b6" x="350" y="34" width="200" height="16" hTextAlign="Center">
+			<expression><![CDATA["Del " + $P{fechaInicio} + " al " + $P{fechaFin}]]></expression>
+		</element>
+		<element kind="textField" uuid="f4dd7b89-206b-472f-8382-5b0bc1541c6c" x="350" y="52" width="200" height="16" fontSize="8.0" hTextAlign="Center">
+			<expression><![CDATA["Emitido: " + $P{fechaEmision}]]></expression>
+		</element>
+	</title>
+	<pageHeader height="39" splitType="Stretch"/>
+	<columnHeader height="28" splitType="Stretch">
+		<element kind="staticText" uuid="991d2212-e948-4b0c-a6a3-a4e0eca490a9" x="0" y="4" width="55" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[SKU]]></text>
+		</element>
+		<element kind="staticText" uuid="fa3bee1b-0473-4d39-92ba-8eb7788fb285" x="55" y="4" width="130" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[DESCRIPCIÓN]]></text>
+		</element>
+		<element kind="staticText" uuid="31625bbc-2493-45b4-8310-e42a136cbe04" x="185" y="4" width="48" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[INICIAL]]></text>
+		</element>
+		<element kind="staticText" uuid="a71b3d14-e077-46df-8b56-df3421ef0487" x="233" y="4" width="52" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[ENTRADAS]]></text>
+		</element>
+		<element kind="staticText" uuid="ea71e4a4-1151-49fc-95ec-3abb2f048ce2" x="285" y="4" width="50" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[SALIDAS]]></text>
+		</element>
+		<element kind="staticText" uuid="48df077c-7367-4ef1-832a-387bdfdc5f01" x="335" y="4" width="48" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[FINAL]]></text>
+		</element>
+		<element kind="staticText" uuid="c07a3544-33be-470a-84e8-db0d6aed5236" x="383" y="4" width="45" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[MÍNIMO]]></text>
+		</element>
+		<element kind="staticText" uuid="a1782915-0d4a-4459-875e-e97dd18ac127" x="428" y="4" width="70" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[ESTADO]]></text>
+		</element>
+		<element kind="staticText" uuid="a8131541-a553-4c36-8789-2b2ea610aeb1" x="498" y="4" width="57" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[DESCUADRE]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<element kind="textField" uuid="56b699c2-6a9e-44c3-923a-9032d3516874" x="0" y="0" width="55" height="15" fontSize="8.0" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{sku}]]></expression>
+			</element>
+			<element kind="textField" uuid="fd7a9c0f-342b-48d1-83fc-cd47b696f9fe" x="55" y="0" width="130" height="15" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{descripcion}]]></expression>
+			</element>
+			<element kind="textField" uuid="285d3c48-c363-4ecb-9d95-ea098cb6d076" x="185" y="0" width="48" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{stockInicial}]]></expression>
+			</element>
+			<element kind="textField" uuid="8d22108b-3b6d-43ec-9bdf-66d3891d2392" x="233" y="0" width="52" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{entradas}]]></expression>
+			</element>
+			<element kind="textField" uuid="acbbbcf2-5a17-4407-bed7-3f86998af7f8" x="285" y="0" width="50" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{salidas}]]></expression>
+			</element>
+			<element kind="textField" uuid="615c789a-153f-4f37-8ce3-dc40c3203e3f" x="335" y="0" width="48" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{stockFinal}]]></expression>
+			</element>
+			<element kind="textField" uuid="7737650d-176c-4089-b4dd-8f667934527d" x="383" y="0" width="45" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{stockMinimo}]]></expression>
+			</element>
+			<element kind="textField" uuid="0c121897-2a0e-45e7-95bb-60919feb2496" x="428" y="0" width="70" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{estado}]]></expression>
+			</element>
+			<element kind="textField" uuid="c3e91385-4113-49fb-b127-f97cf38e7465" x="498" y="0" width="57" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{descuadre}]]></expression>
+			</element>
+			<element kind="line" uuid="10a1e3a2-f3c4-486d-a3e3-37074b522dc2" x="0" y="15" width="555" height="1" forecolor="#BFBFBF"/>
+		</band>
+	</detail>
+	<columnFooter splitType="Stretch"/>
+	<pageFooter height="38" splitType="Stretch">
+		<element kind="staticText" uuid="f16364e9-38a1-4932-ae8a-0be6bac83706" x="0" y="6" width="300" height="16" forecolor="#9C9C9C" fontSize="8.0">
+			<text><![CDATA[Voltio & Pedal - Sistema de control de inventario]]></text>
+		</element>
+		<element kind="textField" uuid="3f5844a1-a6a9-4b36-b6ba-251b73fdef46" x="435" y="6" width="80" height="16" fontSize="8.0">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+		</element>
+		<element kind="textField" uuid="b73361ab-9005-4c5c-80e2-c44de777f9da" x="515" y="6" width="40" height="16" evaluationTime="Report" hTextAlign="Left">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+		<element kind="line" uuid="318c2420-5921-4cb6-bcef-d5c1dcac331c" x="0" y="0" width="555" height="1" forecolor="#BFBFBF"/>
+	</pageFooter>
+	<summary height="100" splitType="Stretch">
+		<element kind="rectangle" uuid="24a8d54e-385b-4aa5-8db0-1c8f7028f42b" x="0" y="4" width="270" height="92" radius="8">
+			<pen lineColor="#0B3C5D"/>
+		</element>
+		<element kind="staticText" uuid="a32d782f-7425-45b3-bd77-7a899b5e42d1" x="7" y="8" width="255" height="12" forecolor="#0B3C5D" fontSize="8.0" bold="true">
+			<text><![CDATA[ESTADÍSTICAS DEL PERIODO]]></text>
+		</element>
+		<element kind="staticText" uuid="6bd17f9a-17a4-405b-b5f3-1f0836c51a19" x="7" y="22" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Producto con mayor caída:]]></text>
+		</element>
+		<element kind="textField" uuid="5a5ea504-38a3-4320-8095-ad0478683cbe" x="142" y="22" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{mayorCaida} == null || "-".equals($P{mayorCaida}) ? "Sin caídas en el periodo" : $P{mayorCaida}]]></expression>
+		</element>
+		<element kind="staticText" uuid="b1deb67c-c3d1-42ad-9dc1-01b3fa1951d6" x="7" y="34" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Bajo el mínimo (sin agotados):]]></text>
+		</element>
+		<element kind="textField" uuid="566a4d1b-42ad-4282-9559-d5f34706e56f" x="142" y="34" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{bajoMinimo}]]></expression>
+		</element>
+		<element kind="staticText" uuid="1658c580-c5c0-4e5b-afb0-bc4f9b92cfef" x="7" y="46" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Productos agotados:]]></text>
+		</element>
+		<element kind="textField" uuid="e531b6f5-4e2f-47f3-9a95-00d071d25a45" x="142" y="46" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{agotados}]]></expression>
+		</element>
+		<element kind="staticText" uuid="04711a9b-76bc-4f8f-ab5e-5f694a5f8ed4" x="7" y="58" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Productos con descuadre:]]></text>
+		</element>
+		<element kind="textField" uuid="9378413f-492f-487b-86fe-b4397903cd59" x="142" y="58" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{conDescuadre}]]></expression>
+		</element>
+		<element kind="staticText" uuid="5d5895da-4eea-4643-8058-bbefb06d97de" x="7" y="70" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Productos en estado normal:]]></text>
+		</element>
+		<element kind="textField" uuid="897185a0-a67d-42ff-8655-105fc2e9abf2" x="142" y="70" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{normales}]]></expression>
+		</element>
+		<element kind="rectangle" uuid="f0b832b1-6d67-4fb6-b906-e3c3a6bd258f" x="285" y="4" width="270" height="92" radius="8">
+			<pen lineColor="#0B3C5D"/>
+		</element>
+		<element kind="staticText" uuid="1cf50025-5858-4adc-a736-8d0165942617" x="292" y="9" width="170" height="14" fontSize="9.0" bold="true">
+			<text><![CDATA[Total de productos:]]></text>
+		</element>
+		<element kind="textField" uuid="85aad26b-0a25-4731-ac93-093b182bf0ab" x="462" y="9" width="86" height="14" fontSize="9.0" bold="true" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{totalRegistros}]]></expression>
+		</element>
+		<element kind="staticText" uuid="1d2b45f7-2628-4451-ba8b-3b5ed69e983c" x="292" y="25" width="170" height="14" fontSize="9.0" bold="false">
+			<text><![CDATA[Compara con stock actual:]]></text>
+		</element>
+		<element kind="textField" uuid="1b921ec2-41e7-4721-b632-d69624ec7f0e" x="462" y="25" width="86" height="14" fontSize="9.0" bold="false" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{comparaStockActual}]]></expression>
+		</element>
+		<element kind="line" uuid="0e34fb43-9bca-42c8-bce7-389da11b3861" x="292" y="43" width="256" height="1" forecolor="#BFBFBF"/>
+		<element kind="staticText" uuid="3b93514f-1611-4bd9-b536-ea4981313b93" x="292" y="47" width="255" height="10" forecolor="#0B3C5D" fontSize="7.0" bold="true">
+			<text><![CDATA[Descuadre:]]></text>
+		</element>
+		<element kind="staticText" uuid="94f8796e-2f0e-4ae7-b948-7f47d96f84d8" x="292" y="57" width="255" height="36" fontSize="7.0">
+			<text><![CDATA[El stock inicial + entradas - salidas no coincide con el stock final o, si el periodo llega hasta hoy, el stock final no coincide con el stock actual del producto.]]></text>
+		</element>
+	</summary>
+</jasperReport>

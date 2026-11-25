@@ -1,0 +1,246 @@
+<!-- Created with Jaspersoft Studio version 7.0.8.final using JasperReports Library version 7.0.8-6f896111  -->
+<jasperReport name="reporte_eliminados" language="java" columnCount="1" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe58235e-1e0d-4f06-8905-e2a46d9b6a9c">
+	<parameter name="titulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["REGISTROS ELIMINADOS"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaInicio" class="java.lang.String">
+		<defaultValueExpression><![CDATA["01/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaFin" class="java.lang.String">
+		<defaultValueExpression><![CDATA["30/11/2026"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaEmision" class="java.lang.String">
+		<defaultValueExpression><![CDATA["24/11/2026 10:00"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalRegistros" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[5]]></defaultValueExpression>
+	</parameter>
+	<parameter name="conStockPendiente" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[3]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reactivados" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="productosDistintos" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[4]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivoBajaRotacion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivoDefecto" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[2]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivoDescontinuado" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivoErrorRegistro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="motivoOtro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="fechaBaja" class="java.lang.String"/>
+	<field name="sku" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="motivo" class="java.lang.String"/>
+	<field name="comentario" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="estadoActual" class="java.lang.String"/>
+	<field name="stock" class="java.lang.Integer"/>
+	<group name="grupoMotivo" keepTogether="true">
+		<expression><![CDATA[$F{motivo}]]></expression>
+		<groupHeader>
+			<band height="22">
+				<element kind="rectangle" uuid="9da5ab1f-bda0-48b0-8618-ea6decf9f2c8" x="0" y="0" width="555" height="22" backcolor="#E8EEF3">
+					<pen lineWidth="0.0"/>
+				</element>
+				<element kind="textField" uuid="01fe0de5-77e7-4d9f-835e-23dc60cf1eff" x="4" y="3" width="400" height="16" bold="true" blankWhenNull="true" vTextAlign="Middle">
+					<expression><![CDATA["Motivo: " + $F{motivo}]]></expression>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<element kind="line" uuid="75753312-da41-4df1-9577-a6cc01483503" x="0" y="0" width="555" height="1" forecolor="#0B3C5D"/>
+				<element kind="staticText" uuid="f3ff0ab2-42b2-4fb7-bd47-8241c8804896" x="245" y="3" width="220" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<text><![CDATA[BAJAS DE ESTE MOTIVO:]]></text>
+				</element>
+				<element kind="textField" uuid="ba9815ab-aaa5-4ffd-9ae3-3a0f9dbb0b69" x="465" y="3" width="90" height="16" fontSize="9.0" bold="true" hTextAlign="Right">
+					<box rightPadding="4"/>
+					<expression><![CDATA[$V{grupoMotivo_COUNT}]]></expression>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<background splitType="Stretch"/>
+	<title height="94" splitType="Stretch">
+		<element kind="staticText" uuid="10ba67c0-f31c-42b2-87ea-ca0e232542c6" x="0" y="5" width="300" height="28" forecolor="#0B305D" markup="none" fontName="SansSerif" fontSize="20.0">
+			<text><![CDATA[VOLTIO & PEDAL]]></text>
+		</element>
+		<element kind="staticText" uuid="8b2e2258-1f60-42f4-82d2-b2abdef67e52" x="0" y="35" width="300" height="16">
+			<text><![CDATA[Scooters, repuestos y accesorios]]></text>
+		</element>
+		<element kind="staticText" uuid="8811828d-00ba-435b-bf2a-015a61573534" x="0" y="51" width="300" height="16">
+			<text><![CDATA[Sistema de control de inventario]]></text>
+		</element>
+		<element kind="rectangle" uuid="976ba6e9-0c38-459f-9c6f-0a0d8d5420f3" x="345" y="5" width="210" height="75" mode="Transparent" radius="8">
+			<pen lineStyle="Solid" lineColor="#0B2F5A"/>
+		</element>
+		<element kind="textField" uuid="b22c081e-4a57-4ad2-993c-ae416de0fd56" x="350" y="10" width="200" height="22" markup="none" fontSize="12.0" textAdjust="ScaleFont" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{titulo}]]></expression>
+		</element>
+		<element kind="textField" uuid="dbb0725f-ed96-4e9f-ae4c-dc10717f46b4" x="350" y="34" width="200" height="16" hTextAlign="Center">
+			<expression><![CDATA["Del " + $P{fechaInicio} + " al " + $P{fechaFin}]]></expression>
+		</element>
+		<element kind="textField" uuid="58fd2248-9ca2-416e-aea7-c50b88c9d048" x="350" y="52" width="200" height="16" fontSize="8.0" hTextAlign="Center">
+			<expression><![CDATA["Emitido: " + $P{fechaEmision}]]></expression>
+		</element>
+	</title>
+	<pageHeader height="39" splitType="Stretch"/>
+	<columnHeader height="28" splitType="Stretch">
+		<element kind="staticText" uuid="dd98e9ee-5ce8-448c-ad53-e6dca7cdbc9b" x="0" y="4" width="72" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[FECHA]]></text>
+		</element>
+		<element kind="staticText" uuid="f6e4705b-1d6f-488b-90b2-ff3f3ac8a2aa" x="72" y="4" width="48" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[SKU]]></text>
+		</element>
+		<element kind="staticText" uuid="34d24952-55f3-4595-a7ea-1cffd2ab551a" x="120" y="4" width="104" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[DESCRIPCIÓN]]></text>
+		</element>
+		<element kind="staticText" uuid="18b7e0af-f5e2-41f1-97d4-a5934410f11c" x="224" y="4" width="52" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[CATEGORÍA]]></text>
+		</element>
+		<element kind="staticText" uuid="86ab26d2-8893-469b-917b-aff4dafcfe9e" x="276" y="4" width="72" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[COMENTARIO]]></text>
+		</element>
+		<element kind="staticText" uuid="312a8bcc-b8ca-4422-b75d-97f9bcf8ca5c" x="348" y="4" width="105" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[USUARIO]]></text>
+		</element>
+		<element kind="staticText" uuid="94a333b2-76ba-4d6c-84cf-bdfc46f9cf59" x="453" y="4" width="62" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[ESTADO ACTUAL]]></text>
+		</element>
+		<element kind="staticText" uuid="6ab0c586-ac21-4420-b1a9-b2d5aed0b714" x="515" y="4" width="40" height="24" forecolor="#FFFFFF" backcolor="#0B3C5D" mode="Opaque" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[STOCK]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<element kind="textField" uuid="78937f91-4feb-4804-94f7-0104e1e107f7" x="0" y="0" width="72" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{fechaBaja}]]></expression>
+			</element>
+			<element kind="textField" uuid="93e9893e-c627-4f37-97d2-c66fcbb266c2" x="72" y="0" width="48" height="15" fontSize="8.0" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{sku}]]></expression>
+			</element>
+			<element kind="textField" uuid="3f6a32c8-376b-4a7f-9b47-1b77d5b8af99" x="120" y="0" width="104" height="15" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{descripcion}]]></expression>
+			</element>
+			<element kind="textField" uuid="e88e4d98-4e5f-4105-a765-e0740aa5ca8f" x="224" y="0" width="52" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{categoria}]]></expression>
+			</element>
+			<element kind="textField" uuid="4630e864-5d79-4bba-9050-ba9a93d1c014" x="276" y="0" width="72" height="15" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{comentario}]]></expression>
+			</element>
+			<element kind="textField" uuid="f8788973-1eef-4634-8ce5-484d6f0b64ed" x="348" y="0" width="105" height="15" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true" vTextAlign="Middle">
+				<box leftPadding="4"/>
+				<expression><![CDATA[$F{usuario}]]></expression>
+			</element>
+			<element kind="textField" uuid="db7bf283-f296-4a59-9567-54174c451a6b" x="453" y="0" width="62" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{estadoActual}]]></expression>
+			</element>
+			<element kind="textField" uuid="60c16e51-5f69-415a-899f-d33766234b7d" x="515" y="0" width="40" height="15" fontSize="8.0" blankWhenNull="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA[$F{stock}]]></expression>
+			</element>
+			<element kind="line" uuid="ba6cf5b2-079f-4d87-aef9-c5001bfeae90" x="0" y="15" width="555" height="1" forecolor="#BFBFBF"/>
+		</band>
+	</detail>
+	<columnFooter splitType="Stretch"/>
+	<pageFooter height="38" splitType="Stretch">
+		<element kind="staticText" uuid="929825c4-be56-446e-bb81-afeec5b88a42" x="0" y="6" width="300" height="16" forecolor="#9C9C9C" fontSize="8.0">
+			<text><![CDATA[Voltio & Pedal - Sistema de control de inventario]]></text>
+		</element>
+		<element kind="textField" uuid="f81f6c88-a314-447d-b173-44ca75bcd48c" x="435" y="6" width="80" height="16" fontSize="8.0">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+		</element>
+		<element kind="textField" uuid="b32a48f7-a149-4720-97a9-68749a33a7a1" x="515" y="6" width="40" height="16" evaluationTime="Report" hTextAlign="Left">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+		</element>
+		<element kind="line" uuid="8f1bd062-76bd-4865-bf62-b887e5db7489" x="0" y="0" width="555" height="1" forecolor="#BFBFBF"/>
+	</pageFooter>
+	<summary height="100" splitType="Stretch">
+		<element kind="rectangle" uuid="77642d4b-748c-4aac-b413-7549f7bbe386" x="0" y="4" width="270" height="92" radius="8">
+			<pen lineColor="#0B3C5D"/>
+		</element>
+		<element kind="staticText" uuid="88dda2a8-ce68-4761-a316-acbc5cd067fc" x="7" y="8" width="255" height="12" forecolor="#0B3C5D" fontSize="8.0" bold="true">
+			<text><![CDATA[BAJAS POR MOTIVO]]></text>
+		</element>
+		<element kind="staticText" uuid="c3642659-b210-43cf-ba44-fdb5d7bd31fe" x="7" y="22" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Baja rotación:]]></text>
+		</element>
+		<element kind="textField" uuid="f3ac3cee-aa08-4c23-9c5b-c26d75c7424c" x="142" y="22" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{motivoBajaRotacion}]]></expression>
+		</element>
+		<element kind="staticText" uuid="cd91a88f-50ab-4a68-a5e6-cd64373b34c8" x="7" y="34" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Defecto:]]></text>
+		</element>
+		<element kind="textField" uuid="ea27795a-c6c0-4a46-a2f7-1fc8f171495d" x="142" y="34" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{motivoDefecto}]]></expression>
+		</element>
+		<element kind="staticText" uuid="1c843363-e1a4-4410-87f3-73864e00909e" x="7" y="46" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Descontinuado:]]></text>
+		</element>
+		<element kind="textField" uuid="e5bc809f-6ea5-4f92-a09b-21001ba349d0" x="142" y="46" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{motivoDescontinuado}]]></expression>
+		</element>
+		<element kind="staticText" uuid="6cee0079-99df-4e06-b802-e24c0764561d" x="7" y="58" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Error de registro:]]></text>
+		</element>
+		<element kind="textField" uuid="8341f6e0-584a-4733-a087-3943e72fa504" x="142" y="58" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{motivoErrorRegistro}]]></expression>
+		</element>
+		<element kind="staticText" uuid="1b017556-2306-4d22-bb8e-1697024b9efd" x="7" y="70" width="135" height="12" fontSize="8.0">
+			<text><![CDATA[Otro:]]></text>
+		</element>
+		<element kind="textField" uuid="54429fa1-1bed-4bc6-995a-9c510db1a5c3" x="142" y="70" width="123" height="12" fontSize="8.0" textAdjust="ScaleFont" blankWhenNull="true">
+			<expression><![CDATA[$P{motivoOtro}]]></expression>
+		</element>
+		<element kind="rectangle" uuid="d7725a96-ea17-47cb-8af9-2f0aa65beb5b" x="285" y="4" width="270" height="92" radius="8">
+			<pen lineColor="#0B3C5D"/>
+		</element>
+		<element kind="staticText" uuid="62ce1eab-cf7e-4afe-bb27-2e46d877284b" x="292" y="8" width="255" height="12" forecolor="#0B3C5D" fontSize="8.0" bold="true">
+			<text><![CDATA[ESTADÍSTICAS DEL PERIODO]]></text>
+		</element>
+		<element kind="staticText" uuid="cdd2f5b5-4b39-4d55-bc39-1c1b8d3718c6" x="292" y="24" width="170" height="14" fontSize="9.0" bold="true">
+			<text><![CDATA[Total de desactivados:]]></text>
+		</element>
+		<element kind="textField" uuid="6925d114-d0ec-44c5-90d8-cb7eda49e3e9" x="462" y="24" width="86" height="14" fontSize="9.0" bold="true" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{totalRegistros}]]></expression>
+		</element>
+		<element kind="staticText" uuid="4b5e49ad-2c86-471c-bf51-07717b7b6030" x="292" y="40" width="170" height="14" fontSize="9.0" bold="false">
+			<text><![CDATA[Con stock pendiente:]]></text>
+		</element>
+		<element kind="textField" uuid="77ce84b5-c4a0-4722-ab1c-16e46c2bdfb9" x="462" y="40" width="86" height="14" fontSize="9.0" bold="false" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{conStockPendiente}]]></expression>
+		</element>
+		<element kind="staticText" uuid="4b48c38a-3b99-4222-ae7e-543bbef1ef68" x="292" y="56" width="170" height="14" fontSize="9.0" bold="false">
+			<text><![CDATA[Productos reactivados:]]></text>
+		</element>
+		<element kind="textField" uuid="a0196345-bebe-4323-ad8f-f01d95e18875" x="462" y="56" width="86" height="14" fontSize="9.0" bold="false" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{reactivados}]]></expression>
+		</element>
+		<element kind="staticText" uuid="fa7a4a77-0a62-40a0-b309-d6c9f808b8e9" x="292" y="72" width="170" height="14" fontSize="9.0" bold="false">
+			<text><![CDATA[Productos distintos:]]></text>
+		</element>
+		<element kind="textField" uuid="5432104e-b603-4ae1-85dc-eb3284a99640" x="462" y="72" width="86" height="14" fontSize="9.0" bold="false" blankWhenNull="true">
+			<box rightPadding="4"/>
+			<expression><![CDATA[$P{productosDistintos}]]></expression>
+		</element>
+	</summary>
+</jasperReport>
