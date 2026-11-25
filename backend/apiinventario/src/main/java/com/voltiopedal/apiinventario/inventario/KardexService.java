@@ -43,6 +43,17 @@ public class KardexService {
         return aplicar(mov);
     }
 
+    /* Ajuste por conteo físico: el signo de la diferencia decide si suma o resta */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public MovimientoInventario registrarAjustePorConteo(Mercaderia mercaderia, int diferencia, Integer idUsuario,
+                                                         Integer idConteo, String observacion) {
+        TipoMovimiento tipo = diferencia > 0 ? TipoMovimiento.AJUSTE_ENTRADA : TipoMovimiento.AJUSTE_SALIDA;
+        MovimientoInventario mov = nuevo(mercaderia, tipo, Math.abs(diferencia), idUsuario);
+        mov.setIdConteo(idConteo);
+        mov.setObservacion(observacion);     /* obligatorio en ajustes (CHECK ck_mov_ajuste_motivo) */
+        return aplicar(mov);
+    }
+
     /*
      * ==============================
      * CONSULTA DEL KARDEX
